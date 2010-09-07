@@ -1144,15 +1144,15 @@ int FS_FOpenFileRead( const char *filename, fileHandle_t *file, qboolean uniqueF
 					Com_Printf( "SYS_DLLNAME_UI + %d: '%s'\n", SYS_DLLNAME_UI_SHIFT, FS_ShiftStr( "ui_mp_x86.dll" /*"ui.mp.i386.so"*/, SYS_DLLNAME_UI_SHIFT ) );
 		  #endif
 					// qagame dll
-					if ( !( pak->referenced & FS_QAGAME_REF ) && FS_ShiftedStrStr( filename, SYS_DLLNAME_QAGAME, -SYS_DLLNAME_QAGAME_SHIFT ) ) {
+					if ( !( pak->referenced & FS_QAGAME_REF ) && !Q_stricmp( filename, Sys_GetDLLName( "qagame" ) ) ) {
 						pak->referenced |= FS_QAGAME_REF;
 					}
 					// cgame dll
-					if ( !( pak->referenced & FS_CGAME_REF ) && FS_ShiftedStrStr( filename, SYS_DLLNAME_CGAME, -SYS_DLLNAME_CGAME_SHIFT ) ) {
+					if ( !( pak->referenced & FS_CGAME_REF ) && !Q_stricmp( filename, Sys_GetDLLName( "cgame" ) ) ) {
 						pak->referenced |= FS_CGAME_REF;
 					}
 					// ui dll
-					if ( !( pak->referenced & FS_UI_REF ) && FS_ShiftedStrStr( filename, SYS_DLLNAME_UI, -SYS_DLLNAME_UI_SHIFT ) ) {
+					if ( !( pak->referenced & FS_UI_REF ) && !Q_stricmp( filename, Sys_GetDLLName( "ui") ) ) {
 						pak->referenced |= FS_UI_REF;
 					}
 
@@ -1334,14 +1334,16 @@ NOTE TTimo:
 
 ==================
 */
-qboolean FS_CL_ExtractFromPakFile( const char *fullpath, const char *gamedir, const char *filename, const char *cvar_lastVersion ) {
+qboolean FS_CL_ExtractFromPakFile( const char *base, const char *gamedir, const char *filename ) {
 	int srcLength;
 	int destLength;
-	unsigned char   *srcData;
-	unsigned char   *destData;
+	unsigned char *srcData;
+	unsigned char *destData;
 	qboolean needToCopy;
-	FILE            *destHandle;
+	FILE *destHandle;
+	char *fn;
 
+	fn =  FS_BuildOSPath( base, gamedir, filename );
 	needToCopy = qtrue;
 
 	// read in compressed file
@@ -1353,7 +1355,7 @@ qboolean FS_CL_ExtractFromPakFile( const char *fullpath, const char *gamedir, co
 	}
 
 	// read in local file
-	destHandle = fopen( fullpath, "rb" );
+	destHandle = fopen( fn, "rb" );
 
 	// if we have a local file, we need to compare the two
 	if ( destHandle ) {
@@ -1364,7 +1366,6 @@ qboolean FS_CL_ExtractFromPakFile( const char *fullpath, const char *gamedir, co
 		if ( destLength > 0 ) {
 			destData = (unsigned char*)Z_Malloc( destLength );
 
-//			fread( destData, 1, destLength, destHandle );
 			fread( destData, destLength, 1, destHandle );
 
 			// compare files
@@ -1392,7 +1393,6 @@ qboolean FS_CL_ExtractFromPakFile( const char *fullpath, const char *gamedir, co
 	if ( needToCopy ) {
 		fileHandle_t f;
 
-		// Com_DPrintf("FS_ExtractFromPakFile: FS_FOpenFileWrite '%s'\n", filename);
 		f = FS_FOpenFileWrite( filename );
 		if ( !f ) {
 			Com_Printf( "Failed to open %s\n", filename );
@@ -1402,14 +1402,6 @@ qboolean FS_CL_ExtractFromPakFile( const char *fullpath, const char *gamedir, co
 		FS_Write( srcData, srcLength, f );
 
 		FS_FCloseFile( f );
-
-#ifdef __linux__
-		// show_bug.cgi?id=463
-		// need to keep track of what versions we extract
-		if ( cvar_lastVersion ) {
-			Cvar_Set( cvar_lastVersion, Cvar_VariableString( "version" ) );
-		}
-#endif
 	}
 
 	FS_FreeFile( srcData );
@@ -3294,76 +3286,6 @@ static void FS_Startup( const char *gameName ) {
 
 
 /*
-===================
-FS_SetRestrictions
-
-Looks for product keys and restricts media add on ability
-if the full version is not found
-===================
-*/
-static void FS_SetRestrictions( void ) {
-	searchpath_t    *path;
-
-#ifndef PRE_RELEASE_DEMO
-	// if fs_restrict is set, don't even look for the id file,
-	// which allows the demo release to be tested even if
-	// the full game is present
-	if ( !fs_restrict->integer ) {
-		// look for the full game id
-
-		// NO RESTRICTIONS IN RETAIL GAME
-		return;
-	}
-#endif
-	Cvar_Set( "fs_restrict", "1" );
-
-	Com_Printf( "\nRunning in restricted demo mode.\n\n" );
-
-	// restart the filesystem with just the demo directory
-	FS_Shutdown( qfalse );
-
-	FS_Startup( BASEGAME );
-
-	// make sure that the pak file has the header checksum we expect
-	for ( path = fs_searchpaths ; path ; path = path->next ) {
-		if ( path->pack ) {
-
-// every time a new demo pk3 file is built, this checksum must be updated.
-// the easiest way to get it is to just run the game and see what it spits out
-//DHM - Nerve :: Wolf Multiplayer demo checksum
-// NOTE TTimo: always needs the 'u' for unsigned int (gcc)
-#define DEMO_MPBIN_CHECKSUM 2217494506u
-#define DEMO_PAK0_CHECKSUM  846032800u
-
-#define SYS_PAKNAME_MPBIN_SHIFT 3
-#define SYS_PAKNAME_MPBIN "psbelq"
-#define SYS_PAKNAME_PAK0_SHIFT 7
-#define SYS_PAKNAME_PAK0 "whr7"
-
-#if 0 // use that stuff for shifted strings
-			Com_Printf( "SYS_PAKNAME_MPBIN + %d: '%s'\n", SYS_PAKNAME_MPBIN_SHIFT, FS_ShiftStr( "mp_bin", SYS_PAKNAME_MPBIN_SHIFT ) );
-			Com_Printf( "SYS_PAKNAME_PAK0 + %d: '%s'\n", SYS_PAKNAME_PAK0_SHIFT, FS_ShiftStr( "pak0", SYS_PAKNAME_PAK0_SHIFT ) );
-#endif
-			if ( FS_ShiftedStrStr( path->pack->pakBasename, SYS_PAKNAME_MPBIN, -SYS_PAKNAME_MPBIN_SHIFT ) ) {
-				// a tiny attempt to keep the checksum from being scannable from the exe
-				if ( ( path->pack->checksum ^ 0x01042000u )
-					 != ( DEMO_MPBIN_CHECKSUM ^ 0x01042000u ) ) {
-					Com_Error( ERR_FATAL, "Corrupted pakfile: %u", path->pack->checksum );
-				}
-			} else if ( FS_ShiftedStrStr( path->pack->pakBasename, SYS_PAKNAME_PAK0, -SYS_PAKNAME_PAK0_SHIFT ) ) {
-				// a tiny attempt to keep the checksum from being scannable from the exe
-				if ( ( path->pack->checksum ^ 0x04062001u )
-					 != ( DEMO_PAK0_CHECKSUM ^ 0x04062001u ) ) {
-					Com_Error( ERR_FATAL, "Corrupted pakfile: %u", path->pack->checksum );
-				}
-			} else {
-				Com_Error( ERR_FATAL, "Corrupted pakfile: %u", path->pack->checksum );
-			}
-		}
-	}
-}
-
-/*
 =====================
 FS_GamePureChecksum
 Returns the checksum of the pk3 from which the server loaded the qagame.qvm
@@ -3560,6 +3482,7 @@ const char *FS_ReferencedPakPureChecksums( void ) {
 	info[0] = 0;
 
 	checksum = fs_checksumFeed;
+	Com_Printf("cgckfeed: %d\n", checksum);
 
 	numPaks = 0;
 	for ( nFlags = FS_CGAME_REF; nFlags; nFlags = nFlags >> 1 ) {
@@ -4053,9 +3976,6 @@ void FS_InitFilesystem( void ) {
 	// try to start up normally
 	FS_Startup( BASEGAME );
 
-	// see if we are going to allow add-ons
-	FS_SetRestrictions();
-
 	// if we can't find default.cfg, assume that the paths are
 	// busted and error out now, rather than getting an unreadable
 	// graphics screen when the font fails to load
@@ -4093,9 +4013,6 @@ void FS_Restart( int checksumFeed ) {
 
 	// try to start up normally
 	FS_Startup( BASEGAME );
-
-	// see if we are going to allow add-ons
-	FS_SetRestrictions();
 
 	// if we can't find default.cfg, assume that the paths are
 	// busted and error out now, rather than getting an unreadable

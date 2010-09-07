@@ -251,6 +251,11 @@ ifeq ($(PLATFORM),linux)
     BASE_CFLAGS += -m64
   endif
   endif
+
+  ifndef SHLIBNAME
+    SHLIBNAME=.mp.$(ARCH).$(SHLIBEXT)
+  endif
+
 else # ifeq Linux
 
 #############################################################################
@@ -348,6 +353,10 @@ ifeq ($(PLATFORM),mingw32)
 
   BUILD_CLIENT_SMP = 0
 
+  ifndef SHLIBNAME
+    SHLIBNAME=_mp_$(ARCH).$(SHLIBEXT)
+  endif
+
 else # ifeq mingw32
 
 #############################################################################
@@ -367,10 +376,6 @@ TARGETS =
 
 ifndef FULLBINEXT
   FULLBINEXT=.$(ARCH)$(BINEXT)
-endif
-
-ifndef SHLIBNAME
-  SHLIBNAME=.mp.$(ARCH).$(SHLIBEXT)
 endif
 
 ifneq ($(BUILD_SERVER),0)
@@ -485,7 +490,7 @@ all: debug release
 
 debug:
 	@$(MAKE) targets B=$(BD) CFLAGS="$(CFLAGS) $(BASE_CFLAGS) $(DEPEND_CFLAGS)" \
-	  OPTIMIZE="$(DEBUG_CFLAGS)" OPTIMIZEVM="$(DEBUG_CFLAGS)" \
+	  OPTIMIZE="-D_DEBUG $(DEBUG_CFLAGS)" OPTIMIZEVM="-D_DEBUG $(DEBUG_CFLAGS)" \
 	  CLIENT_CFLAGS="$(CLIENT_CFLAGS)" SERVER_CFLAGS="$(SERVER_CFLAGS)" V=$(V)
 
 release:
