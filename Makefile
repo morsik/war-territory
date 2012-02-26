@@ -177,7 +177,15 @@ ifndef NASM
 endif
   
 ifeq ($(PLATFORM),linux)
+  unix = yes
+  LIBS=-ldl -lm
+endif
+ifeq ($(PLATFORM),freebsd)
+  unix = yes
+  LIBS=-lm
+endif
 
+ifdef unix
   ifeq ($(ARCH),alpha)
     ARCH=axp
   else
@@ -250,7 +258,6 @@ ifeq ($(PLATFORM),linux)
   SHLIBLDFLAGS=-shared $(LDFLAGS)
 
   THREAD_LIBS=-lpthread
-  LIBS=-ldl -lm 
 
   CLIENT_LIBS=$(SDL_LIBS) -lGL
 

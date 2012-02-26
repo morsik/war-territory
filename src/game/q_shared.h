@@ -292,7 +292,13 @@ void Sys_PumpEvents(void);
 
 #define MAC_STATIC
 
-#ifdef __i386__
+#ifdef __i686__
+#define CPUSTRING   "linux-i686"
+#elif defined __i586__
+#define CPUSTRING   "linux-i586"
+#elif defined __i486__
+#define CPUSTRING   "linux-i486"
+#elif defined __i386__
 #define CPUSTRING   "linux-i386"
 #elif defined __x86_64__
 #define CPUSTRING   "linux-x86_64"
@@ -300,6 +306,22 @@ void Sys_PumpEvents(void);
 #define CPUSTRING   "linux-alpha"
 #else
 #define CPUSTRING   "linux-other"
+#endif
+
+#define PATH_SEP '/'
+
+#endif
+
+//===================== FreeBSD DEFINES =====================
+
+#ifdef __FreeBSD__
+
+#define MAC_STATIC
+
+#ifdef __i386__
+#define CPUSTRING  "freebsd-i386"
+#elif defined __x86_64__
+#define CPUSTRING  "freebsd-amd64"
 #endif
 
 #define PATH_SEP '/'
