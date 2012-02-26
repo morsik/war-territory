@@ -857,7 +857,7 @@ Downloads are finished
 */
 void SV_DoneDownload_f(client_t *cl)
 {
-	Com_DPrintf("clientDownload: %s Done\n", cl->name);
+	Com_DPrintf("clientDownload: %s Done\n", rc(cl->name));
 	// resend the game state to update any clients that entered during the download
 	SV_SendClientGameState(cl);
 }
@@ -931,7 +931,7 @@ void SV_WWWDownload_f(client_t *cl)
 	// only accept wwwdl commands for clients which we first flagged as wwwdl ourselves
 	if (!cl->bWWWDl)
 	{
-		Com_Printf("SV_WWWDownload: unexpected wwwdl '%s' for client '%s'\n", subcmd, cl->name);
+		Com_Printf("SV_WWWDownload: unexpected wwwdl '%s' for client '%s'\n", subcmd, rc(cl->name));
 		SV_DropClient(cl, va("SV_WWWDownload: unexpected wwwdl %s", subcmd));
 		return;
 	}
@@ -940,7 +940,7 @@ void SV_WWWDownload_f(client_t *cl)
 	{
 		if (cl->bWWWing)
 		{
-			Com_Printf("WARNING: dupe wwwdl ack from client '%s'\n", cl->name);
+			Com_Printf("WARNING: dupe wwwdl ack from client '%s'\n", rc(cl->name));
 		}
 		cl->bWWWing = qtrue;
 		return;
@@ -954,7 +954,7 @@ void SV_WWWDownload_f(client_t *cl)
 	// below for messages that only happen during/after download
 	if (!cl->bWWWing)
 	{
-		Com_Printf("SV_WWWDownload: unexpected wwwdl '%s' for client '%s'\n", subcmd, cl->name);
+		Com_Printf("SV_WWWDownload: unexpected wwwdl '%s' for client '%s'\n", subcmd, rc(cl->name));
 		SV_DropClient(cl, va("SV_WWWDownload: unexpected wwwdl %s", subcmd));
 		return;
 	}
@@ -978,7 +978,7 @@ void SV_WWWDownload_f(client_t *cl)
 	}
 	else if (!Q_stricmp(subcmd, "chkfail"))
 	{
-		Com_Printf("WARNING: client '%s' reports that the redirect download for '%s' had wrong checksum.\n", cl->name, cl->downloadName);
+		Com_Printf("WARNING: client '%s' reports that the redirect download for '%s' had wrong checksum.\n", rc(cl->name), cl->downloadName);
 		Com_Printf("         you should check your download redirect configuration.\n");
 		cl->download      = 0;
 		*cl->downloadName = 0;
@@ -989,7 +989,7 @@ void SV_WWWDownload_f(client_t *cl)
 		return;
 	}
 
-	Com_Printf("SV_WWWDownload: unknown wwwdl subcommand '%s' for client '%s'\n", subcmd, cl->name);
+	Com_Printf("SV_WWWDownload: unknown wwwdl subcommand '%s' for client '%s'\n", subcmd, rc(cl->name));
 	SV_DropClient(cl, va("SV_WWWDownload: unknown wwwdl subcommand '%s'", subcmd));
 }
 
@@ -1019,7 +1019,7 @@ static qboolean SV_CheckFallbackURL(client_t *cl, msg_t *msg)
 		return qfalse;
 	}
 
-	Com_Printf("clientDownload: sending client '%s' to fallback URL '%s'\n", cl->name, sv_wwwFallbackURL->string);
+	Com_Printf("clientDownload: sending client '%s' to fallback URL '%s'\n", rc(cl->name), sv_wwwFallbackURL->string);
 
 	MSG_WriteByte(msg, svc_download);
 	MSG_WriteShort(msg, -1);   // block -1 means ftp/http download
@@ -1135,7 +1135,7 @@ void SV_WriteDownloadToClient(client_t *cl, msg_t *msg)
 						if (cl->downloadnotify & DLNOTIFY_REDIRECT)
 						{
 							cl->downloadnotify &= ~DLNOTIFY_REDIRECT;
-							Com_Printf("Redirecting client '%s' to %s\n", cl->name, cl->downloadURL);
+							Com_Printf("Redirecting client '%s' to %s\n", rc(cl->name), cl->downloadURL);
 						}
 						// once cl->downloadName is set (and possibly we have our listening socket), let the client know
 						cl->bWWWDl = qtrue;
@@ -1156,7 +1156,7 @@ void SV_WriteDownloadToClient(client_t *cl, msg_t *msg)
 					else
 					{
 						// that should NOT happen - even regular download would fail then anyway
-						Com_Printf("ERROR: Client '%s': couldn't extract file size for %s\n", cl->name, cl->downloadName);
+						Com_Printf("ERROR: Client '%s': couldn't extract file size for %s\n", rc(cl->name), cl->downloadName);
 					}
 				}
 				else
@@ -1166,7 +1166,7 @@ void SV_WriteDownloadToClient(client_t *cl, msg_t *msg)
 					{
 						return;
 					}
-					Com_Printf("Client '%s': falling back to regular downloading for failed file %s\n", cl->name, cl->downloadName);
+					Com_Printf("Client '%s': falling back to regular downloading for failed file %s\n", rc(cl->name), cl->downloadName);
 				}
 			}
 			else
@@ -1175,7 +1175,7 @@ void SV_WriteDownloadToClient(client_t *cl, msg_t *msg)
 				{
 					return;
 				}
-				Com_Printf("Client '%s' is not configured for www download\n", cl->name);
+				Com_Printf("Client '%s' is not configured for www download\n", rc(cl->name));
 			}
 		}
 
@@ -1253,13 +1253,13 @@ void SV_WriteDownloadToClient(client_t *cl, msg_t *msg)
 		rate = sv_dl_maxRate->integer;
 		if (bTellRate)
 		{
-			Com_Printf("'%s' downloading at sv_dl_maxrate (%d)\n", cl->name, sv_dl_maxRate->integer);
+			Com_Printf("'%s' downloading at sv_dl_maxrate (%d)\n", rc(cl->name), sv_dl_maxRate->integer);
 		}
 	}
 	else
 	if (bTellRate)
 	{
-		Com_Printf("'%s' downloading at rate %d\n", cl->name, rate);
+		Com_Printf("'%s' downloading at rate %d\n", rc(cl->name), rate);
 	}
 
 	if (!rate)
@@ -1401,7 +1401,7 @@ static void SV_VerifyPaks_f(client_t *cl)
 			// since serverId is a frame count, it always goes up
 			if (atoi(pArg) < sv.checksumFeedServerId)
 			{
-				Com_DPrintf("ignoring outdated cp command from client %s\n", cl->name);
+				Com_DPrintf("ignoring outdated cp command from client %s\n", rc(cl->name));
 				return;
 			}
 		}
@@ -1738,7 +1738,7 @@ void SV_ExecuteClientCommand(client_t *cl, const char *s, qboolean clientOK, qbo
 	}
 	else if (!bProcessed)
 	{
-		Com_DPrintf("client text ignored for %s: %s\n", cl->name, Cmd_Argv(0));
+		Com_DPrintf("client text ignored for %s: %s\n", rc(cl->name), Cmd_Argv(0));
 	}
 }
 
@@ -1763,12 +1763,12 @@ static qboolean SV_ClientCommand(client_t *cl, msg_t *msg, qboolean premaprestar
 		return qtrue;
 	}
 
-	Com_DPrintf("clientCommand: %s : %i : %s\n", cl->name, seq, s);
+	Com_DPrintf("clientCommand: %s : %i : %s\n", rc(cl->name), seq, s);
 
 	// drop the connection if we have somehow lost commands
 	if (seq > cl->lastClientCommand + 1)
 	{
-		Com_Printf("Client %s lost %i clientCommands\n", cl->name, seq - cl->lastClientCommand + 1);
+		Com_Printf("Client %s lost %i clientCommands\n", rc(cl->name), seq - cl->lastClientCommand + 1);
 		SV_DropClient(cl, "Lost reliable commands");
 		return qfalse;
 	}
@@ -1910,7 +1910,7 @@ static void SV_UserMove(client_t *cl, msg_t *msg, qboolean delta)
 		if (cl->state == CS_ACTIVE)
 		{
 			// we didn't get a cp yet, don't assume anything and just send the gamestate all over again
-			Com_DPrintf("%s: didn't get cp command, resending gamestate\n", cl->name);
+			Com_DPrintf("%s: didn't get cp command, resending gamestate\n", rc(cl->name));
 			SV_SendClientGameState(cl);
 		}
 		return;
@@ -2050,14 +2050,14 @@ void SV_ExecuteClientMessage(client_t *cl, msg_t *msg)
 	{
 		if (serverId >= sv.restartedServerId && serverId < sv.serverId)     // TTimo - use a comparison here to catch multiple map_restart
 		{   // they just haven't caught the map_restart yet
-			Com_DPrintf("%s : ignoring pre map_restart / outdated client message\n", cl->name);
+			Com_DPrintf("%s : ignoring pre map_restart / outdated client message\n", rc(cl->name));
 			return;
 		}
 		// if we can tell that the client has dropped the last
 		// gamestate we sent them, resend it
 		if (cl->messageAcknowledge > cl->gamestateMessageNum)
 		{
-			Com_DPrintf("%s : dropped gamestate, resending\n", cl->name);
+			Com_DPrintf("%s : dropped gamestate, resending\n", rc(cl->name));
 			SV_SendClientGameState(cl);
 		}
 

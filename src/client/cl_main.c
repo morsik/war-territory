@@ -1138,7 +1138,7 @@ void CL_ForwardCommandToServer(const char *string)
 
 	if (clc.demoplaying || cls.state < CA_CONNECTED || cmd[0] == '+')
 	{
-		Com_Printf("Unknown command \"%s\"\n", cmd);
+		Com_Printf("Unknown command \"%s\"\n", rc(cmd));
 		return;
 	}
 

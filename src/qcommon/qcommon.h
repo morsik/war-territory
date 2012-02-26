@@ -44,6 +44,8 @@ If you have questions concerning this license or the applicable additional terms
 #define PRE_RELEASE_DEMO_NODEVMAP
 #endif // PRE_RELEASE_DEMO
 
+#define rc(x) va("%s^7", x) // shortcut for color reset after printing variable
+
 //============================================================================
 
 //

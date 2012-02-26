@@ -130,6 +130,7 @@ static void CON_Hide(void)
 				CON_Back();
 			}
 		}
+		CON_Back(); // Delete " "
 		CON_Back(); // Delete "]"
 		ttycon_hide++;
 	}
@@ -154,7 +155,7 @@ static void CON_Show(void)
 		if (ttycon_hide == 0)
 		{
 			size_t size;
-			size = write(STDOUT_FILENO, "]", 1);
+			size = write(STDOUT_FILENO, "] ", 2);
 			if (TTY_con.cursor)
 			{
 				for (i = 0; i < TTY_con.cursor; i++)
@@ -177,6 +178,7 @@ void CON_Shutdown(void)
 {
 	if (ttycon_on)
 	{
+		CON_Back(); // Delete " "
 		CON_Back(); // Delete "]"
 		tcsetattr(STDIN_FILENO, TCSADRAIN, &TTY_tc);
 	}
@@ -367,7 +369,7 @@ char *CON_Input(void)
 					Field_Clear(&TTY_con);
 					key  = '\n';
 					size = write(1, &key, 1);
-					size = write(1, "]", 1);
+					size = write(1, "] ", 2);
 					return text;
 				}
 				if (key == '\t')
