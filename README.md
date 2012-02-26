@@ -50,9 +50,9 @@ Can lead into naming problems when using 32bit, currently only amd64 works perfe
 
     BUILD_CLIENT=0 BUILD_CLIENT_SMP=0 gmake
 
-Possible problems:
+Known issues:
 ------------------
 
-If you're experiencing problems with sound, try disabling OpenAL:
+OpenAL is broken. Compile without it:
 
-    /s_useOpenAl 0
+    USE_OPENAL=0 make

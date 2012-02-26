@@ -305,12 +305,14 @@ static sfx_t *S_FindName(const char *name)
 	}
 	if (!name[0])
 	{
-		Com_Error(ERR_FATAL, "S_FindName: empty name\n");
+		Com_Printf("^3WARNING: S_FindName: empty name\n");
+		return NULL;
 	}
 
 	if (strlen(name) >= MAX_QPATH)
 	{
-		Com_Error(ERR_FATAL, "Sound name too long: %s", name);
+		Com_Printf("^3WARNING: Sound name too long: %s", name);
+		return NULL;
 	}
 
 	hash = S_HashSFXName(name);
