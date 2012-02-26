@@ -661,6 +661,7 @@ Q3OBJ = \
   $(B)/client/dl_main_curl.o \
   $(B)/client/files.o \
   $(B)/client/md4.o \
+  $(B)/client/md5.o \
   $(B)/client/msg.o \
   $(B)/client/net_chan.o \
   $(B)/client/net_ip.o \
@@ -872,6 +873,7 @@ Q3DOBJ = \
   $(B)/ded/cvar.o \
   $(B)/ded/files.o \
   $(B)/ded/md4.o \
+  $(B)/ded/md5.o \
   $(B)/ded/msg.o \
   $(B)/ded/net_chan.o \
   $(B)/ded/net_ip.o \

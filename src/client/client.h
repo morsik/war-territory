@@ -37,6 +37,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "../cgame/cg_public.h"
 #include "../game/bg_public.h"
 
+#define ETKEY_FILE "etkey"
+#define ETKEY_SIZE 28
+
 #define RETRANSMIT_TIMEOUT  3000    // time between connection packet retransmits
 
 #define LIMBOCHAT_WIDTH     140     // NERVE - SMF - NOTE TTimo buffer size indicator, not related to screen bbox
