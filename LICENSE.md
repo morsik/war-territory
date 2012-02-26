@@ -1,64 +1,12 @@
-Wolfenstein: Enemy Territory GPL source release
-===============================================
-
-This file contains the following sections:
-
-GENERAL NOTES
-LICENSE
-
-GENERAL NOTES
-=============
-
-Game data and patching:
------------------------
-
-Wolfenstein: Enemy Territory is a free release, and can be downloaded from
-http://www.splashdamage.com/content/wolfenstein-enemy-territory-barracks
-
-This source release does not contain any game data, the game data is still
-covered by the original EULA and must be obeyed as usual.
-
-Install the latest version of the game for your platform to get the game data.
-
-Compiling on win32:
--------------------
-
-A Visual C++ 2008 project is provided in src\wolf.sln.
-The solution file is compatible with the Express release of Visual C++.
-
-In order to test your binaries, backup and remove Main\mp_bin.pk3, then replace
-WolfMP.exe, Main\qagame_mp_x86.dll, Main\cgame_mp_x86.dll, Main\ui_mp_x86.dll
-by your compiled versions. When starting the server make sure to specify
-'Pure Server: No' in the advanced settings page.
-
-Compiling on GNU/Linux x86:
----------------------------
-
-Get scons from http://scons.org/ if your favorite distribution doesn't
-package it.
-
-run scons from the src/ directory. see scons --help for build options
-
-If any problems occur, consult the internet.
-
-Other platforms, updated source code, security issues:
-------------------------------------------------------
-
-If you have obtained this source code several weeks after the time of release
-(August 2010), it is likely that you can find modified and improved
-versions of the engine in various open source projects across the internet.
-Depending what is your interest with the source code, those may be a better
-starting point.
-
-
-LICENSE
-=======
-
 See COPYING.txt for the GNU GENERAL PUBLIC LICENSE
 
-ADDITIONAL TERMS:  The Wolfenstein: Enemy Territory GPL Source Code is also subject to certain additional terms. You should have received a copy of these additional terms immediately following the terms and conditions of the GNU GPL which accompanied the Wolf ET Source Code.  If not, please request a copy in writing from id Software at id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
+ADDITIONAL TERMS:  The Wolfenstein: Enemy Territory GPL Source Code is also subject to certain additional terms. You should have received a copy of 
+these additional terms immediately following the terms and conditions of the GNU GPL which accompanied the Wolf ET Source Code.  If not, please request 
+a copy in writing from id Software at id Software LLC, c/o ZeniMax Media Inc., Suite 120, Rockville, Maryland 20850 USA.
 
-EXCLUDED CODE:  The code described below and contained in the Wolfenstein: Enemy Territory GPL Source Code release is not part of the Program covered by the GPL and is expressly excluded from its terms.  You are solely responsible for obtaining from the copyright holder a license for such code and complying with the applicable license terms.
+EXCLUDED CODE:  The code described below and contained in the Wolfenstein: Enemy Territory GPL Source Code release is not part of the Program covered 
+by the GPL and is expressly excluded from its terms.  You are solely responsible for obtaining from the copyright holder a license for such code and 
+complying with the applicable license terms.
 
 IO on .zip files using portions of zlib
 ---------------------------------------------------------------------------
@@ -158,3 +106,4 @@ FT2 library
 -----------------------------------------------------------------------------
 src/ft2
 The FT2 library is being used under the GPL v2 as indicated by its LICENSE.txt
+

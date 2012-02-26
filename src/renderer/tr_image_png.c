@@ -82,7 +82,7 @@ typedef uint32_t PNG_ChunkCRC;
  *  All others are ignored.
  */
 
-#define MAKE_CHUNKTYPE(a,b,c,d) (((a) << 24) | ((b) << 16) | ((c) << 8) | ((d)))
+#define MAKE_CHUNKTYPE(a, b, c, d) (((a) << 24) | ((b) << 16) | ((c) << 8) | ((d)))
 
 #define PNG_ChunkType_IHDR MAKE_CHUNKTYPE('I', 'H', 'D', 'R')
 #define PNG_ChunkType_PLTE MAKE_CHUNKTYPE('P', 'L', 'T', 'E')
@@ -98,11 +98,11 @@ struct PNG_Chunk_IHDR
 {
 	uint32_t Width;
 	uint32_t Height;
-	uint8_t  BitDepth;
-	uint8_t  ColourType;
-	uint8_t  CompressionMethod;
-	uint8_t  FilterMethod;
-	uint8_t  InterlaceMethod;
+	uint8_t BitDepth;
+	uint8_t ColourType;
+	uint8_t CompressionMethod;
+	uint8_t FilterMethod;
+	uint8_t InterlaceMethod;
 };
 
 #define PNG_Chunk_IHDR_Size (13)
@@ -138,10 +138,10 @@ struct PNG_Chunk_IHDR
  *  different BitDepths are specified.
  */
 
-#define PNG_BitDepth_1  ( 1)
-#define PNG_BitDepth_2  ( 2)
-#define PNG_BitDepth_4  ( 4)
-#define PNG_BitDepth_8  ( 8)
+#define PNG_BitDepth_1  (1)
+#define PNG_BitDepth_2  (2)
+#define PNG_BitDepth_4  (4)
+#define PNG_BitDepth_8  (8)
 #define PNG_BitDepth_16 (16)
 
 /*
@@ -210,9 +210,9 @@ struct PNG_ZlibHeader
 struct BufferedFile
 {
 	byte *Buffer;
-	int   Length;
+	int Length;
 	byte *Ptr;
-	int   BytesLeft;
+	int BytesLeft;
 };
 
 /*
@@ -222,7 +222,8 @@ struct BufferedFile
 static struct BufferedFile *ReadBufferedFile(const char *name)
 {
 	struct BufferedFile *BF;
-	union {
+	union
+	{
 		byte *b;
 		void *v;
 	} buffer;
@@ -231,7 +232,7 @@ static struct BufferedFile *ReadBufferedFile(const char *name)
 	 *  input verification
 	 */
 
-	if(!name)
+	if (!name)
 	{
 		return(NULL);
 	}
@@ -241,7 +242,7 @@ static struct BufferedFile *ReadBufferedFile(const char *name)
 	 */
 
 	BF = ri.Z_Malloc(sizeof(struct BufferedFile));
-	if(!BF)
+	if (!BF)
 	{
 		return(NULL);
 	}
@@ -266,7 +267,7 @@ static struct BufferedFile *ReadBufferedFile(const char *name)
 	 *  Did we get it? Is it big enough?
 	 */
 
-	if(!(BF->Buffer && (BF->Length > 0)))
+	if (!(BF->Buffer && (BF->Length > 0)))
 	{
 		ri.Free(BF);
 
@@ -289,9 +290,9 @@ static struct BufferedFile *ReadBufferedFile(const char *name)
 
 static void CloseBufferedFile(struct BufferedFile *BF)
 {
-	if(BF)
+	if (BF)
 	{
-		if(BF->Buffer)
+		if (BF->Buffer)
 		{
 			ri.FS_FreeFile(BF->Buffer);
 		}
@@ -312,7 +313,7 @@ static void *BufferedFileRead(struct BufferedFile *BF, unsigned Length)
 	 *  input verification
 	 */
 
-	if(!(BF && Length))
+	if (!(BF && Length))
 	{
 		return(NULL);
 	}
@@ -321,7 +322,7 @@ static void *BufferedFileRead(struct BufferedFile *BF, unsigned Length)
 	 *  not enough bytes left
 	 */
 
-	if(Length > BF->BytesLeft)
+	if (Length > BF->BytesLeft)
 	{
 		return(NULL);
 	}
@@ -348,13 +349,13 @@ static void *BufferedFileRead(struct BufferedFile *BF, unsigned Length)
 
 static qboolean BufferedFileRewind(struct BufferedFile *BF, unsigned Offset)
 {
-	unsigned BytesRead; 
+	unsigned BytesRead;
 
 	/*
 	 *  input verification
 	 */
 
-	if(!BF)
+	if (!BF)
 	{
 		return(qfalse);
 	}
@@ -363,7 +364,7 @@ static qboolean BufferedFileRewind(struct BufferedFile *BF, unsigned Offset)
 	 *  special trick to rewind to the beginning of the buffer
 	 */
 
-	if(Offset == (unsigned)-1)
+	if (Offset == (unsigned)-1)
 	{
 		BF->Ptr       = BF->Buffer;
 		BF->BytesLeft = BF->Length;
@@ -381,7 +382,7 @@ static qboolean BufferedFileRewind(struct BufferedFile *BF, unsigned Offset)
 	 *  We can only rewind to the beginning of the BufferedFile.
 	 */
 
-	if(Offset > BytesRead)
+	if (Offset > BytesRead)
 	{
 		return(qfalse);
 	}
@@ -406,7 +407,7 @@ static qboolean BufferedFileSkip(struct BufferedFile *BF, unsigned Offset)
 	 *  input verification
 	 */
 
-	if(!BF)
+	if (!BF)
 	{
 		return(qfalse);
 	}
@@ -415,7 +416,7 @@ static qboolean BufferedFileSkip(struct BufferedFile *BF, unsigned Offset)
 	 *  We can only skip to the end of the BufferedFile.
 	 */
 
-	if(Offset > BF->BytesLeft)
+	if (Offset > BF->BytesLeft)
 	{
 		return(qfalse);
 	}
@@ -445,7 +446,7 @@ static qboolean FindChunk(struct BufferedFile *BF, uint32_t ChunkType)
 	 *  input verification
 	 */
 
-	if(!BF)
+	if (!BF)
 	{
 		return(qfalse);
 	}
@@ -454,14 +455,14 @@ static qboolean FindChunk(struct BufferedFile *BF, uint32_t ChunkType)
 	 *  cycle trough the chunks
 	 */
 
-	while(qtrue)
+	while (qtrue)
 	{
 		/*
 		 *  Read the chunk-header.
 		 */
 
 		CH = BufferedFileRead(BF, PNG_ChunkHeader_Size);
-		if(!CH)
+		if (!CH)
 		{
 			return(qfalse);
 		}
@@ -478,7 +479,7 @@ static qboolean FindChunk(struct BufferedFile *BF, uint32_t ChunkType)
 		 *  We found it!
 		 */
 
-		if(Type == ChunkType)
+		if (Type == ChunkType)
 		{
 			/*
 			 *  Rewind to the start of the chunk.
@@ -494,12 +495,12 @@ static qboolean FindChunk(struct BufferedFile *BF, uint32_t ChunkType)
 			 *  Skip the rest of the chunk.
 			 */
 
-			if(Length)
+			if (Length)
 			{
-				if(!BufferedFileSkip(BF, Length + PNG_ChunkCRC_Size))
+				if (!BufferedFileSkip(BF, Length + PNG_ChunkCRC_Size))
 				{
 					return(qfalse);
-				}  
+				}
 			}
 		}
 	}
@@ -514,11 +515,11 @@ static qboolean FindChunk(struct BufferedFile *BF, uint32_t ChunkType)
 static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 {
 	uint8_t  *DecompressedData;
-	uint32_t  DecompressedDataLength;
+	uint32_t DecompressedDataLength;
 
 	uint8_t  *CompressedData;
 	uint8_t  *CompressedDataPtr;
-	uint32_t  CompressedDataLength;
+	uint32_t CompressedDataLength;
 
 	struct PNG_ChunkHeader *CH;
 
@@ -527,17 +528,17 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 
 	int BytesToRewind;
 
-	int32_t   puffResult;
+	int32_t  puffResult;
 	uint8_t  *puffDest;
-	uint32_t  puffDestLen;
+	uint32_t puffDestLen;
 	uint8_t  *puffSrc;
-	uint32_t  puffSrcLen;
+	uint32_t puffSrcLen;
 
 	/*
 	 *  input verification
 	 */
 
-	if(!(BF && Buffer))
+	if (!(BF && Buffer))
 	{
 		return(-1);
 	}
@@ -546,11 +547,11 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 	 *  some zeroing
 	 */
 
-	DecompressedData = NULL;
+	DecompressedData       = NULL;
 	DecompressedDataLength = 0;
-	*Buffer = DecompressedData;
+	*Buffer                = DecompressedData;
 
-	CompressedData = NULL;
+	CompressedData       = NULL;
 	CompressedDataLength = 0;
 
 	BytesToRewind = 0;
@@ -559,7 +560,7 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 	 *  Find the first IDAT chunk.
 	 */
 
-	if(!FindChunk(BF, PNG_ChunkType_IDAT))
+	if (!FindChunk(BF, PNG_ChunkType_IDAT))
 	{
 		return(-1);
 	}
@@ -568,14 +569,14 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 	 *  Count the size of the uncompressed data
 	 */
 
-	while(qtrue)
+	while (qtrue)
 	{
 		/*
 		 *  Read chunk header
 		 */
 
 		CH = BufferedFileRead(BF, PNG_ChunkHeader_Size);
-		if(!CH)
+		if (!CH)
 		{
 			/*
 			 *  Rewind to the start of this adventure
@@ -598,9 +599,9 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 		 *  We have reached the end of the IDAT chunks
 		 */
 
-		if(!(Type == PNG_ChunkType_IDAT))
+		if (!(Type == PNG_ChunkType_IDAT))
 		{
-			BufferedFileRewind(BF, PNG_ChunkHeader_Size); 
+			BufferedFileRewind(BF, PNG_ChunkHeader_Size);
 
 			break;
 		}
@@ -615,24 +616,24 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 		 *  Skip to next chunk
 		 */
 
-		if(Length)
+		if (Length)
 		{
-			if(!BufferedFileSkip(BF, Length + PNG_ChunkCRC_Size))
+			if (!BufferedFileSkip(BF, Length + PNG_ChunkCRC_Size))
 			{
 				BufferedFileRewind(BF, BytesToRewind);
 
 				return(-1);
 			}
 
-			BytesToRewind += Length + PNG_ChunkCRC_Size;
+			BytesToRewind        += Length + PNG_ChunkCRC_Size;
 			CompressedDataLength += Length;
-		} 
+		}
 	}
 
 	BufferedFileRewind(BF, BytesToRewind);
 
 	CompressedData = ri.Z_Malloc(CompressedDataLength);
-	if(!CompressedData)
+	if (!CompressedData)
 	{
 		return(-1);
 	}
@@ -643,16 +644,16 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 	 *  Collect the compressed Data
 	 */
 
-	while(qtrue)
+	while (qtrue)
 	{
 		/*
 		 *  Read chunk header
 		 */
 
 		CH = BufferedFileRead(BF, PNG_ChunkHeader_Size);
-		if(!CH)
+		if (!CH)
 		{
-			ri.Free(CompressedData); 
+			ri.Free(CompressedData);
 
 			return(-1);
 		}
@@ -668,9 +669,9 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 		 *  We have reached the end of the IDAT chunks
 		 */
 
-		if(!(Type == PNG_ChunkType_IDAT))
+		if (!(Type == PNG_ChunkType_IDAT))
 		{
-			BufferedFileRewind(BF, PNG_ChunkHeader_Size); 
+			BufferedFileRewind(BF, PNG_ChunkHeader_Size);
 
 			break;
 		}
@@ -679,28 +680,28 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 		 *  Copy the Data
 		 */
 
-		if(Length)
+		if (Length)
 		{
 			uint8_t *OrigCompressedData;
 
 			OrigCompressedData = BufferedFileRead(BF, Length);
-			if(!OrigCompressedData)
+			if (!OrigCompressedData)
 			{
-				ri.Free(CompressedData); 
+				ri.Free(CompressedData);
 
 				return(-1);
 			}
 
-			if(!BufferedFileSkip(BF, PNG_ChunkCRC_Size))
+			if (!BufferedFileSkip(BF, PNG_ChunkCRC_Size))
 			{
-				ri.Free(CompressedData); 
+				ri.Free(CompressedData);
 
 				return(-1);
 			}
 
 			memcpy(CompressedDataPtr, OrigCompressedData, Length);
 			CompressedDataPtr += Length;
-		} 
+		}
 	}
 
 	/*
@@ -722,7 +723,7 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 	 */
 
 	puffResult = puff(puffDest, &puffDestLen, puffSrc, &puffSrcLen);
-	if(!((puffResult == 0) && (puffDestLen > 0)))
+	if (!((puffResult == 0) && (puffDestLen > 0)))
 	{
 		ri.Free(CompressedData);
 
@@ -734,7 +735,7 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 	 */
 
 	DecompressedData = ri.Z_Malloc(puffDestLen);
-	if(!DecompressedData)
+	if (!DecompressedData)
 	{
 		ri.Free(CompressedData);
 
@@ -765,7 +766,7 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 	 *  Check if the last puff() was successfull.
 	 */
 
-	if(!((puffResult == 0) && (puffDestLen > 0)))
+	if (!((puffResult == 0) && (puffDestLen > 0)))
 	{
 		ri.Free(DecompressedData);
 
@@ -777,7 +778,7 @@ static uint32_t DecompressIDATs(struct BufferedFile *BF, uint8_t **Buffer)
 	 */
 
 	DecompressedDataLength = puffDestLen;
-	*Buffer = DecompressedData;
+	*Buffer                = DecompressedData;
 
 	return(DecompressedDataLength);
 }
@@ -795,8 +796,8 @@ static uint8_t PredictPaeth(uint8_t a, uint8_t b, uint8_t c)
 	 */
 
 	uint8_t Pr;
-	int p;
-	int pa, pb, pc;
+	int     p;
+	int     pa, pb, pc;
 
 	Pr = 0;
 
@@ -805,11 +806,11 @@ static uint8_t PredictPaeth(uint8_t a, uint8_t b, uint8_t c)
 	pb = abs(p - ((int) b));
 	pc = abs(p - ((int) c));
 
-	if((pa <= pb) && (pa <= pc))
+	if ((pa <= pb) && (pa <= pc))
 	{
 		Pr = a;
 	}
-	else if(pb <= pc)
+	else if (pb <= pc)
 	{
 		Pr = b;
 	}
@@ -826,27 +827,27 @@ static uint8_t PredictPaeth(uint8_t a, uint8_t b, uint8_t c)
  *  Reverse the filters.
  */
 
-static qboolean UnfilterImage(uint8_t  *DecompressedData, 
-		uint32_t  ImageHeight,
-		uint32_t  BytesPerScanline, 
-		uint32_t  BytesPerPixel)
+static qboolean UnfilterImage(uint8_t *DecompressedData,
+                              uint32_t ImageHeight,
+                              uint32_t BytesPerScanline,
+                              uint32_t BytesPerPixel)
 {
-	uint8_t   *DecompPtr;
-	uint8_t   FilterType;
+	uint8_t  *DecompPtr;
+	uint8_t  FilterType;
 	uint8_t  *PixelLeft, *PixelUp, *PixelUpLeft;
-	uint32_t  w, h, p;
+	uint32_t w, h, p;
 
 	/*
 	 *  some zeros for the filters
 	 */
 
-	uint8_t Zeros[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+	uint8_t Zeros[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	/*
 	 *  input verification
 	 */
 
-	if(!(DecompressedData && BytesPerPixel))
+	if (!(DecompressedData && BytesPerPixel))
 	{
 		return(qfalse);
 	}
@@ -855,7 +856,7 @@ static qboolean UnfilterImage(uint8_t  *DecompressedData,
 	 *  ImageHeight and BytesPerScanline can be zero in small interlaced images.
 	 */
 
-	if((!ImageHeight) || (!BytesPerScanline))
+	if ((!ImageHeight) || (!BytesPerScanline))
 	{
 		return(qtrue);
 	}
@@ -874,7 +875,7 @@ static qboolean UnfilterImage(uint8_t  *DecompressedData,
 	 *  Go trough all scanlines.
 	 */
 
-	for(h = 0; h < ImageHeight; h++)
+	for (h = 0; h < ImageHeight; h++)
 	{
 		/*
 		 *  Every scanline starts with a FilterType byte.
@@ -895,7 +896,7 @@ static qboolean UnfilterImage(uint8_t  *DecompressedData,
 		 *  Plus one byte for the FilterType
 		 */
 
-		if(h > 0)
+		if (h > 0)
 		{
 			PixelUp = DecompPtr - (BytesPerScanline + 1);
 		}
@@ -914,57 +915,57 @@ static qboolean UnfilterImage(uint8_t  *DecompressedData,
 		 *  Cycle trough all pixels of the scanline.
 		 */
 
-		for(w = 0; w < (BytesPerScanline / BytesPerPixel); w++)
+		for (w = 0; w < (BytesPerScanline / BytesPerPixel); w++)
 		{
 			/*
 			 *  Cycle trough the bytes of the pixel.
 			 */
 
-			for(p = 0; p < BytesPerPixel; p++)
+			for (p = 0; p < BytesPerPixel; p++)
 			{
-				switch(FilterType)
-				{ 
-					case PNG_FilterType_None :
-					{
-						/*
-						 *  The byte is unfiltered.
-						 */
+				switch (FilterType)
+				{
+				case PNG_FilterType_None:
+				{
+					/*
+					 *  The byte is unfiltered.
+					 */
 
-						break;
-					}
+					break;
+				}
 
-					case PNG_FilterType_Sub :
-					{
-						DecompPtr[p] += PixelLeft[p];
+				case PNG_FilterType_Sub:
+				{
+					DecompPtr[p] += PixelLeft[p];
 
-						break;
-					}
+					break;
+				}
 
-					case PNG_FilterType_Up :
-					{
-						DecompPtr[p] += PixelUp[p];
+				case PNG_FilterType_Up:
+				{
+					DecompPtr[p] += PixelUp[p];
 
-						break;
-					}
+					break;
+				}
 
-					case PNG_FilterType_Average :
-					{
-						DecompPtr[p] += ((uint8_t) ((((uint16_t) PixelLeft[p]) + ((uint16_t) PixelUp[p])) / 2));
+				case PNG_FilterType_Average:
+				{
+					DecompPtr[p] += ((uint8_t) ((((uint16_t) PixelLeft[p]) + ((uint16_t) PixelUp[p])) / 2));
 
-						break;
-					}
+					break;
+				}
 
-					case PNG_FilterType_Paeth :
-					{
-						DecompPtr[p] += PredictPaeth(PixelLeft[p], PixelUp[p], PixelUpLeft[p]);
+				case PNG_FilterType_Paeth:
+				{
+					DecompPtr[p] += PredictPaeth(PixelLeft[p], PixelUp[p], PixelUpLeft[p]);
 
-						break;
-					}
+					break;
+				}
 
-					default :
-					{
-						return(qfalse);
-					}
+				default:
+				{
+					return(qfalse);
+				}
 				}
 			}
 
@@ -974,7 +975,7 @@ static qboolean UnfilterImage(uint8_t  *DecompressedData,
 			 *  We only have a upleft pixel if we are on the second line or above.
 			 */
 
-			if(h > 0)
+			if (h > 0)
 			{
 				PixelUpLeft = DecompPtr - (BytesPerScanline + 1);
 			}
@@ -989,7 +990,7 @@ static qboolean UnfilterImage(uint8_t  *DecompressedData,
 			 *  We only have a previous line if we are on the second line and above.
 			 */
 
-			if(h > 0)
+			if (h > 0)
 			{
 				PixelUp = DecompPtr - (BytesPerScanline + 1);
 			}
@@ -1004,254 +1005,254 @@ static qboolean UnfilterImage(uint8_t  *DecompressedData,
  */
 
 static qboolean ConvertPixel(struct PNG_Chunk_IHDR *IHDR,
-		byte                  *OutPtr,
-		uint8_t               *DecompPtr,
-		qboolean               HasTransparentColour,
-		uint8_t               *TransparentColour,
-		uint8_t               *OutPal)
+                             byte *OutPtr,
+                             uint8_t *DecompPtr,
+                             qboolean HasTransparentColour,
+                             uint8_t *TransparentColour,
+                             uint8_t *OutPal)
 {
 	/*
 	 *  input verification
 	 */
 
-	if(!(IHDR && OutPtr && DecompPtr && TransparentColour && OutPal))
+	if (!(IHDR && OutPtr && DecompPtr && TransparentColour && OutPal))
 	{
 		return(qfalse);
 	}
 
-	switch(IHDR->ColourType)
+	switch (IHDR->ColourType)
 	{
-		case PNG_ColourType_Grey :
+	case PNG_ColourType_Grey:
+	{
+		switch (IHDR->BitDepth)
 		{
-			switch(IHDR->BitDepth)
+		case PNG_BitDepth_1:
+		case PNG_BitDepth_2:
+		case PNG_BitDepth_4:
+		{
+			uint8_t Step;
+			uint8_t GreyValue;
+
+			Step = 0xFF / ((1 << IHDR->BitDepth) - 1);
+
+			GreyValue = DecompPtr[0] * Step;
+
+			OutPtr[0] = GreyValue;
+			OutPtr[1] = GreyValue;
+			OutPtr[2] = GreyValue;
+			OutPtr[3] = 0xFF;
+
+			/*
+			 *  Grey supports full transparency for one specified colour
+			 */
+
+			if (HasTransparentColour)
 			{
-				case PNG_BitDepth_1 :
-				case PNG_BitDepth_2 :
-				case PNG_BitDepth_4 :
+				if (TransparentColour[1] == DecompPtr[0])
 				{
-					uint8_t Step;
-					uint8_t GreyValue;
-
-					Step = 0xFF / ((1 << IHDR->BitDepth) - 1);
-
-					GreyValue = DecompPtr[0] * Step;
-
-					OutPtr[0] = GreyValue;
-					OutPtr[1] = GreyValue;
-					OutPtr[2] = GreyValue;
-					OutPtr[3] = 0xFF;
-
-					/*
-					 *  Grey supports full transparency for one specified colour
-					 */
-
-					if(HasTransparentColour)
-					{
-						if(TransparentColour[1] == DecompPtr[0])
-						{
-							OutPtr[3] = 0x00;
-						}
-					}
-
-
-					break;
+					OutPtr[3] = 0x00;
 				}
+			}
 
-				case PNG_BitDepth_8 :
-				case PNG_BitDepth_16 :
+
+			break;
+		}
+
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
+		{
+			OutPtr[0] = DecompPtr[0];
+			OutPtr[1] = DecompPtr[0];
+			OutPtr[2] = DecompPtr[0];
+			OutPtr[3] = 0xFF;
+
+			/*
+			 *  Grey supports full transparency for one specified colour
+			 */
+
+			if (HasTransparentColour)
+			{
+				if (IHDR->BitDepth == PNG_BitDepth_8)
 				{
-					OutPtr[0] = DecompPtr[0];
-					OutPtr[1] = DecompPtr[0];
-					OutPtr[2] = DecompPtr[0];
-					OutPtr[3] = 0xFF;
-
-					/*
-					 *  Grey supports full transparency for one specified colour
-					 */
-
-					if(HasTransparentColour)
+					if (TransparentColour[1] == DecompPtr[0])
 					{
-						if(IHDR->BitDepth == PNG_BitDepth_8)
-						{
-							if(TransparentColour[1] == DecompPtr[0])
-							{
-								OutPtr[3] = 0x00;
-							}
-						}
-						else
-						{
-							if((TransparentColour[0] == DecompPtr[0]) && (TransparentColour[1] == DecompPtr[1]))
-							{
-								OutPtr[3] = 0x00;
-							}
-						}
+						OutPtr[3] = 0x00;
 					}
-
-					break;
 				}
-
-				default :
+				else
 				{
-					return(qfalse);
+					if ((TransparentColour[0] == DecompPtr[0]) && (TransparentColour[1] == DecompPtr[1]))
+					{
+						OutPtr[3] = 0x00;
+					}
 				}
 			}
 
 			break;
 		}
 
-		case PNG_ColourType_True :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8 :
-				{
-					OutPtr[0] = DecompPtr[0];
-					OutPtr[1] = DecompPtr[1];
-					OutPtr[2] = DecompPtr[2];
-					OutPtr[3] = 0xFF;
-
-					/*
-					 *  True supports full transparency for one specified colour
-					 */
-
-					if(HasTransparentColour)
-					{
-						if((TransparentColour[1] == DecompPtr[0]) &&
-								(TransparentColour[3] == DecompPtr[1]) &&
-								(TransparentColour[5] == DecompPtr[2]))
-						{
-							OutPtr[3] = 0x00;
-						}
-					}
-
-					break;
-				}
-
-				case PNG_BitDepth_16 :
-				{
-					/*
-					 *  We use only the upper byte.
-					 */
-
-					OutPtr[0] = DecompPtr[0];
-					OutPtr[1] = DecompPtr[2];
-					OutPtr[2] = DecompPtr[4];
-					OutPtr[3] = 0xFF;
-
-					/*
-					 *  True supports full transparency for one specified colour
-					 */
-
-					if(HasTransparentColour)
-					{
-						if((TransparentColour[0] == DecompPtr[0]) && (TransparentColour[1] == DecompPtr[1]) &&
-								(TransparentColour[2] == DecompPtr[2]) && (TransparentColour[3] == DecompPtr[3]) &&
-								(TransparentColour[4] == DecompPtr[4]) && (TransparentColour[5] == DecompPtr[5]))
-						{
-							OutPtr[3] = 0x00;
-						}
-					}
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		case PNG_ColourType_Indexed :
-		{
-			OutPtr[0] = OutPal[DecompPtr[0] * Q3IMAGE_BYTESPERPIXEL + 0];
-			OutPtr[1] = OutPal[DecompPtr[0] * Q3IMAGE_BYTESPERPIXEL + 1];
-			OutPtr[2] = OutPal[DecompPtr[0] * Q3IMAGE_BYTESPERPIXEL + 2];
-			OutPtr[3] = OutPal[DecompPtr[0] * Q3IMAGE_BYTESPERPIXEL + 3];
-
-			break;
-		}
-
-		case PNG_ColourType_GreyAlpha :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8 :
-				{
-					OutPtr[0] = DecompPtr[0];
-					OutPtr[1] = DecompPtr[0];
-					OutPtr[2] = DecompPtr[0];
-					OutPtr[3] = DecompPtr[1];
-
-					break;
-				}
-
-				case PNG_BitDepth_16 :
-				{
-					/*
-					 *  We use only the upper byte.
-					 */
-
-					OutPtr[0] = DecompPtr[0];
-					OutPtr[1] = DecompPtr[0];
-					OutPtr[2] = DecompPtr[0];
-					OutPtr[3] = DecompPtr[2];
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		case PNG_ColourType_TrueAlpha :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8 :
-				{
-					OutPtr[0] = DecompPtr[0];
-					OutPtr[1] = DecompPtr[1];
-					OutPtr[2] = DecompPtr[2];
-					OutPtr[3] = DecompPtr[3];
-
-					break;
-				}
-
-				case PNG_BitDepth_16 :
-				{
-					/*
-					 *  We use only the upper byte.
-					 */
-
-					OutPtr[0] = DecompPtr[0];
-					OutPtr[1] = DecompPtr[2];
-					OutPtr[2] = DecompPtr[4];
-					OutPtr[3] = DecompPtr[6];
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		default :
+		default:
 		{
 			return(qfalse);
 		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_True:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		{
+			OutPtr[0] = DecompPtr[0];
+			OutPtr[1] = DecompPtr[1];
+			OutPtr[2] = DecompPtr[2];
+			OutPtr[3] = 0xFF;
+
+			/*
+			 *  True supports full transparency for one specified colour
+			 */
+
+			if (HasTransparentColour)
+			{
+				if ((TransparentColour[1] == DecompPtr[0]) &&
+				    (TransparentColour[3] == DecompPtr[1]) &&
+				    (TransparentColour[5] == DecompPtr[2]))
+				{
+					OutPtr[3] = 0x00;
+				}
+			}
+
+			break;
+		}
+
+		case PNG_BitDepth_16:
+		{
+			/*
+			 *  We use only the upper byte.
+			 */
+
+			OutPtr[0] = DecompPtr[0];
+			OutPtr[1] = DecompPtr[2];
+			OutPtr[2] = DecompPtr[4];
+			OutPtr[3] = 0xFF;
+
+			/*
+			 *  True supports full transparency for one specified colour
+			 */
+
+			if (HasTransparentColour)
+			{
+				if ((TransparentColour[0] == DecompPtr[0]) && (TransparentColour[1] == DecompPtr[1]) &&
+				    (TransparentColour[2] == DecompPtr[2]) && (TransparentColour[3] == DecompPtr[3]) &&
+				    (TransparentColour[4] == DecompPtr[4]) && (TransparentColour[5] == DecompPtr[5]))
+				{
+					OutPtr[3] = 0x00;
+				}
+			}
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_Indexed:
+	{
+		OutPtr[0] = OutPal[DecompPtr[0] * Q3IMAGE_BYTESPERPIXEL + 0];
+		OutPtr[1] = OutPal[DecompPtr[0] * Q3IMAGE_BYTESPERPIXEL + 1];
+		OutPtr[2] = OutPal[DecompPtr[0] * Q3IMAGE_BYTESPERPIXEL + 2];
+		OutPtr[3] = OutPal[DecompPtr[0] * Q3IMAGE_BYTESPERPIXEL + 3];
+
+		break;
+	}
+
+	case PNG_ColourType_GreyAlpha:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		{
+			OutPtr[0] = DecompPtr[0];
+			OutPtr[1] = DecompPtr[0];
+			OutPtr[2] = DecompPtr[0];
+			OutPtr[3] = DecompPtr[1];
+
+			break;
+		}
+
+		case PNG_BitDepth_16:
+		{
+			/*
+			 *  We use only the upper byte.
+			 */
+
+			OutPtr[0] = DecompPtr[0];
+			OutPtr[1] = DecompPtr[0];
+			OutPtr[2] = DecompPtr[0];
+			OutPtr[3] = DecompPtr[2];
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_TrueAlpha:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		{
+			OutPtr[0] = DecompPtr[0];
+			OutPtr[1] = DecompPtr[1];
+			OutPtr[2] = DecompPtr[2];
+			OutPtr[3] = DecompPtr[3];
+
+			break;
+		}
+
+		case PNG_BitDepth_16:
+		{
+			/*
+			 *  We use only the upper byte.
+			 */
+
+			OutPtr[0] = DecompPtr[0];
+			OutPtr[1] = DecompPtr[2];
+			OutPtr[2] = DecompPtr[4];
+			OutPtr[3] = DecompPtr[6];
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	default:
+	{
+		return(qfalse);
+	}
 	}
 
 	return(qtrue);
@@ -1263,25 +1264,25 @@ static qboolean ConvertPixel(struct PNG_Chunk_IHDR *IHDR,
  */
 
 static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR,
-		byte                  *OutBuffer, 
-		uint8_t               *DecompressedData,
-		uint32_t               DecompressedDataLength,
-		qboolean               HasTransparentColour,
-		uint8_t               *TransparentColour,
-		uint8_t               *OutPal)
+                                         byte *OutBuffer,
+                                         uint8_t *DecompressedData,
+                                         uint32_t DecompressedDataLength,
+                                         qboolean HasTransparentColour,
+                                         uint8_t *TransparentColour,
+                                         uint8_t *OutPal)
 {
 	uint32_t IHDR_Width;
 	uint32_t IHDR_Height;
 	uint32_t BytesPerScanline, BytesPerPixel, PixelsPerByte;
-	uint32_t  w, h, p;
-	byte *OutPtr;
-	uint8_t *DecompPtr;
+	uint32_t w, h, p;
+	byte     *OutPtr;
+	uint8_t  *DecompPtr;
 
 	/*
 	 *  input verification
 	 */
 
-	if(!(IHDR && OutBuffer && DecompressedData && DecompressedDataLength && TransparentColour && OutPal))
+	if (!(IHDR && OutBuffer && DecompressedData && DecompressedDataLength && TransparentColour && OutPal))
 	{
 		return(qfalse);
 	}
@@ -1297,141 +1298,141 @@ static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR,
 	 *  information for un-filtering
 	 */
 
-	switch(IHDR->ColourType)
+	switch (IHDR->ColourType)
 	{
-		case PNG_ColourType_Grey :
+	case PNG_ColourType_Grey:
+	{
+		switch (IHDR->BitDepth)
 		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_1 :
-				case PNG_BitDepth_2 :
-				case PNG_BitDepth_4 :
-				{
-					BytesPerPixel    = 1;
-					PixelsPerByte    = 8 / IHDR->BitDepth;
-
-					break;
-				}
-
-				case PNG_BitDepth_8  :
-				case PNG_BitDepth_16 :
-				{
-					BytesPerPixel    = (IHDR->BitDepth / 8) * PNG_NumColourComponents_Grey;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
+		case PNG_BitDepth_1:
+		case PNG_BitDepth_2:
+		case PNG_BitDepth_4:
+		{
+			BytesPerPixel = 1;
+			PixelsPerByte = 8 / IHDR->BitDepth;
 
 			break;
 		}
 
-		case PNG_ColourType_True :
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
 		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8  :
-				case PNG_BitDepth_16 :
-				{
-					BytesPerPixel    = (IHDR->BitDepth / 8) * PNG_NumColourComponents_True;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
+			BytesPerPixel = (IHDR->BitDepth / 8) * PNG_NumColourComponents_Grey;
+			PixelsPerByte = 1;
 
 			break;
 		}
 
-		case PNG_ColourType_Indexed :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_1 :
-				case PNG_BitDepth_2 :
-				case PNG_BitDepth_4 :
-				{
-					BytesPerPixel    = 1;
-					PixelsPerByte    = 8 / IHDR->BitDepth;
-
-					break;
-				}
-
-				case PNG_BitDepth_8 :
-				{
-					BytesPerPixel    = PNG_NumColourComponents_Indexed;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		case PNG_ColourType_GreyAlpha :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8 :
-				case PNG_BitDepth_16 :
-				{
-					BytesPerPixel    = (IHDR->BitDepth / 8) * PNG_NumColourComponents_GreyAlpha;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		case PNG_ColourType_TrueAlpha :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8 :
-				case PNG_BitDepth_16 :
-				{
-					BytesPerPixel    = (IHDR->BitDepth / 8) * PNG_NumColourComponents_TrueAlpha;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		default :
+		default:
 		{
 			return(qfalse);
 		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_True:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
+		{
+			BytesPerPixel = (IHDR->BitDepth / 8) * PNG_NumColourComponents_True;
+			PixelsPerByte = 1;
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_Indexed:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_1:
+		case PNG_BitDepth_2:
+		case PNG_BitDepth_4:
+		{
+			BytesPerPixel = 1;
+			PixelsPerByte = 8 / IHDR->BitDepth;
+
+			break;
+		}
+
+		case PNG_BitDepth_8:
+		{
+			BytesPerPixel = PNG_NumColourComponents_Indexed;
+			PixelsPerByte = 1;
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_GreyAlpha:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
+		{
+			BytesPerPixel = (IHDR->BitDepth / 8) * PNG_NumColourComponents_GreyAlpha;
+			PixelsPerByte = 1;
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_TrueAlpha:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
+		{
+			BytesPerPixel = (IHDR->BitDepth / 8) * PNG_NumColourComponents_TrueAlpha;
+			PixelsPerByte = 1;
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	default:
+	{
+		return(qfalse);
+	}
 	}
 
 	/*
@@ -1444,7 +1445,7 @@ static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR,
 	 *  Check if we have enough data for the whole image.
 	 */
 
-	if(!(DecompressedDataLength == ((BytesPerScanline + 1) * IHDR_Height)))
+	if (!(DecompressedDataLength == ((BytesPerScanline + 1) * IHDR_Height)))
 	{
 		return(qfalse);
 	}
@@ -1453,7 +1454,7 @@ static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR,
 	 *  Unfilter the image.
 	 */
 
-	if(!UnfilterImage(DecompressedData, IHDR_Height, BytesPerScanline, BytesPerPixel))
+	if (!UnfilterImage(DecompressedData, IHDR_Height, BytesPerScanline, BytesPerPixel))
 	{
 		return(qfalse);
 	}
@@ -1462,14 +1463,14 @@ static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR,
 	 *  Set the working pointers to the beginning of the buffers.
 	 */
 
-	OutPtr = OutBuffer;
+	OutPtr    = OutBuffer;
 	DecompPtr = DecompressedData;
 
 	/*
 	 *  Create the output image.
 	 */
 
-	for(h = 0; h < IHDR_Height; h++)
+	for (h = 0; h < IHDR_Height; h++)
 	{
 		/*
 		 *  Count the pixels on the scanline for those multipixel bytes
@@ -1489,24 +1490,24 @@ static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR,
 
 		CurrPixel = 0;
 
-		for(w = 0; w < (BytesPerScanline / BytesPerPixel); w++)
+		for (w = 0; w < (BytesPerScanline / BytesPerPixel); w++)
 		{
-			if(PixelsPerByte > 1)
+			if (PixelsPerByte > 1)
 			{
 				uint8_t  Mask;
 				uint32_t Shift;
 				uint8_t  SinglePixel;
 
-				for(p = 0; p < PixelsPerByte; p++)
+				for (p = 0; p < PixelsPerByte; p++)
 				{
-					if(CurrPixel < IHDR_Width)
+					if (CurrPixel < IHDR_Width)
 					{
 						Mask  = (1 << IHDR->BitDepth) - 1;
 						Shift = (PixelsPerByte - 1 - p) * IHDR->BitDepth;
 
 						SinglePixel = ((DecompPtr[0] & (Mask << Shift)) >> Shift);
 
-						if(!ConvertPixel(IHDR, OutPtr, &SinglePixel, HasTransparentColour, TransparentColour, OutPal))
+						if (!ConvertPixel(IHDR, OutPtr, &SinglePixel, HasTransparentColour, TransparentColour, OutPal))
 						{
 							return(qfalse);
 						}
@@ -1519,7 +1520,7 @@ static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR,
 			}
 			else
 			{
-				if(!ConvertPixel(IHDR, OutPtr, DecompPtr, HasTransparentColour, TransparentColour, OutPal))
+				if (!ConvertPixel(IHDR, OutPtr, DecompPtr, HasTransparentColour, TransparentColour, OutPal))
 				{
 					return(qfalse);
 				}
@@ -1540,12 +1541,12 @@ static qboolean DecodeImageNonInterlaced(struct PNG_Chunk_IHDR *IHDR,
  */
 
 static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
-		byte                  *OutBuffer, 
-		uint8_t               *DecompressedData,
-		uint32_t               DecompressedDataLength,
-		qboolean               HasTransparentColour,
-		uint8_t               *TransparentColour,
-		uint8_t               *OutPal)
+                                      byte *OutBuffer,
+                                      uint8_t *DecompressedData,
+                                      uint32_t DecompressedDataLength,
+                                      qboolean HasTransparentColour,
+                                      uint8_t *TransparentColour,
+                                      uint8_t *OutPal)
 {
 	uint32_t IHDR_Width;
 	uint32_t IHDR_Height;
@@ -1553,15 +1554,15 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 	uint32_t PassWidth[PNG_Adam7_NumPasses], PassHeight[PNG_Adam7_NumPasses];
 	uint32_t WSkip[PNG_Adam7_NumPasses], WOffset[PNG_Adam7_NumPasses], HSkip[PNG_Adam7_NumPasses], HOffset[PNG_Adam7_NumPasses];
 	uint32_t w, h, p, a;
-	byte *OutPtr;
-	uint8_t *DecompPtr;
+	byte     *OutPtr;
+	uint8_t  *DecompPtr;
 	uint32_t TargetLength;
 
 	/*
 	 *  input verification
 	 */
 
-	if(!(IHDR && OutBuffer && DecompressedData && DecompressedDataLength && TransparentColour && OutPal))
+	if (!(IHDR && OutBuffer && DecompressedData && DecompressedDataLength && TransparentColour && OutPal))
 	{
 		return(qfalse);
 	}
@@ -1641,148 +1642,148 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 	 *  information for un-filtering
 	 */
 
-	switch(IHDR->ColourType)
+	switch (IHDR->ColourType)
 	{
-		case PNG_ColourType_Grey :
+	case PNG_ColourType_Grey:
+	{
+		switch (IHDR->BitDepth)
 		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_1 :
-				case PNG_BitDepth_2 :
-				case PNG_BitDepth_4 :
-				{
-					BytesPerPixel    = 1;
-					PixelsPerByte    = 8 / IHDR->BitDepth;
-
-					break;
-				}
-
-				case PNG_BitDepth_8  :
-				case PNG_BitDepth_16 :
-				{
-					BytesPerPixel    = (IHDR->BitDepth / 8) * PNG_NumColourComponents_Grey;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
+		case PNG_BitDepth_1:
+		case PNG_BitDepth_2:
+		case PNG_BitDepth_4:
+		{
+			BytesPerPixel = 1;
+			PixelsPerByte = 8 / IHDR->BitDepth;
 
 			break;
 		}
 
-		case PNG_ColourType_True :
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
 		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8  :
-				case PNG_BitDepth_16 :
-				{
-					BytesPerPixel    = (IHDR->BitDepth / 8) * PNG_NumColourComponents_True;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
+			BytesPerPixel = (IHDR->BitDepth / 8) * PNG_NumColourComponents_Grey;
+			PixelsPerByte = 1;
 
 			break;
 		}
 
-		case PNG_ColourType_Indexed :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_1 :
-				case PNG_BitDepth_2 :
-				case PNG_BitDepth_4 :
-				{
-					BytesPerPixel    = 1;
-					PixelsPerByte    = 8 / IHDR->BitDepth;
-
-					break;
-				}
-
-				case PNG_BitDepth_8 :
-				{
-					BytesPerPixel    = PNG_NumColourComponents_Indexed;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		case PNG_ColourType_GreyAlpha :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8 :
-				case PNG_BitDepth_16 :
-				{
-					BytesPerPixel    = (IHDR->BitDepth / 8) * PNG_NumColourComponents_GreyAlpha;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		case PNG_ColourType_TrueAlpha :
-		{
-			switch(IHDR->BitDepth)
-			{
-				case PNG_BitDepth_8 :
-				case PNG_BitDepth_16 :
-				{
-					BytesPerPixel    = (IHDR->BitDepth / 8) * PNG_NumColourComponents_TrueAlpha;
-					PixelsPerByte    = 1;
-
-					break;
-				}
-
-				default :
-				{
-					return(qfalse);
-				}
-			}
-
-			break;
-		}
-
-		default :
+		default:
 		{
 			return(qfalse);
 		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_True:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
+		{
+			BytesPerPixel = (IHDR->BitDepth / 8) * PNG_NumColourComponents_True;
+			PixelsPerByte = 1;
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_Indexed:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_1:
+		case PNG_BitDepth_2:
+		case PNG_BitDepth_4:
+		{
+			BytesPerPixel = 1;
+			PixelsPerByte = 8 / IHDR->BitDepth;
+
+			break;
+		}
+
+		case PNG_BitDepth_8:
+		{
+			BytesPerPixel = PNG_NumColourComponents_Indexed;
+			PixelsPerByte = 1;
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_GreyAlpha:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
+		{
+			BytesPerPixel = (IHDR->BitDepth / 8) * PNG_NumColourComponents_GreyAlpha;
+			PixelsPerByte = 1;
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	case PNG_ColourType_TrueAlpha:
+	{
+		switch (IHDR->BitDepth)
+		{
+		case PNG_BitDepth_8:
+		case PNG_BitDepth_16:
+		{
+			BytesPerPixel = (IHDR->BitDepth / 8) * PNG_NumColourComponents_TrueAlpha;
+			PixelsPerByte = 1;
+
+			break;
+		}
+
+		default:
+		{
+			return(qfalse);
+		}
+		}
+
+		break;
+	}
+
+	default:
+	{
+		return(qfalse);
+	}
 	}
 
 	/*
 	 *  Calculate the size of the scanlines per pass
 	 */
 
-	for(a = 0; a < PNG_Adam7_NumPasses; a++)
+	for (a = 0; a < PNG_Adam7_NumPasses; a++)
 	{
 		BytesPerScanline[a] = (PassWidth[a] * BytesPerPixel + (PixelsPerByte - 1)) / PixelsPerByte;
 	}
@@ -1793,7 +1794,7 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 
 	TargetLength = 0;
 
-	for(a = 0; a < PNG_Adam7_NumPasses; a++)
+	for (a = 0; a < PNG_Adam7_NumPasses; a++)
 	{
 		TargetLength += ((BytesPerScanline[a] + (BytesPerScanline[a] ? 1 : 0)) * PassHeight[a]);
 	}
@@ -1802,7 +1803,7 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 	 *  Check if we have enough data for the whole image.
 	 */
 
-	if(!(DecompressedDataLength == TargetLength))
+	if (!(DecompressedDataLength == TargetLength))
 	{
 		return(qfalse);
 	}
@@ -1813,9 +1814,9 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 
 	DecompPtr = DecompressedData;
 
-	for(a = 0; a < PNG_Adam7_NumPasses; a++)
+	for (a = 0; a < PNG_Adam7_NumPasses; a++)
 	{
-		if(!UnfilterImage(DecompPtr, PassHeight[a], BytesPerScanline[a], BytesPerPixel))
+		if (!UnfilterImage(DecompPtr, PassHeight[a], BytesPerScanline[a], BytesPerPixel))
 		{
 			return(qfalse);
 		}
@@ -1833,9 +1834,9 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 	 *  Create the output image.
 	 */
 
-	for(a = 0; a < PNG_Adam7_NumPasses; a++)
+	for (a = 0; a < PNG_Adam7_NumPasses; a++)
 	{
-		for(h = 0; h < PassHeight[a]; h++)
+		for (h = 0; h < PassHeight[a]; h++)
 		{
 			/*
 			 *  Count the pixels on the scanline for those multipixel bytes
@@ -1848,7 +1849,7 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 			 *  but only when the pass has a width bigger than zero
 			 */
 
-			if(BytesPerScanline[a])
+			if (BytesPerScanline[a])
 			{
 				DecompPtr++;
 			}
@@ -1859,17 +1860,17 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 
 			CurrPixel = 0;
 
-			for(w = 0; w < (BytesPerScanline[a] / BytesPerPixel); w++)
+			for (w = 0; w < (BytesPerScanline[a] / BytesPerPixel); w++)
 			{
-				if(PixelsPerByte > 1)
+				if (PixelsPerByte > 1)
 				{
 					uint8_t  Mask;
 					uint32_t Shift;
 					uint8_t  SinglePixel;
 
-					for(p = 0; p < PixelsPerByte; p++)
+					for (p = 0; p < PixelsPerByte; p++)
 					{
-						if(CurrPixel < PassWidth[a])
+						if (CurrPixel < PassWidth[a])
 						{
 							Mask  = (1 << IHDR->BitDepth) - 1;
 							Shift = (PixelsPerByte - 1 - p) * IHDR->BitDepth;
@@ -1878,7 +1879,7 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 
 							OutPtr = OutBuffer + (((((h * HSkip[a]) + HOffset[a]) * IHDR_Width) + ((CurrPixel * WSkip[a]) + WOffset[a])) * Q3IMAGE_BYTESPERPIXEL);
 
-							if(!ConvertPixel(IHDR, OutPtr, &SinglePixel, HasTransparentColour, TransparentColour, OutPal))
+							if (!ConvertPixel(IHDR, OutPtr, &SinglePixel, HasTransparentColour, TransparentColour, OutPal))
 							{
 								return(qfalse);
 							}
@@ -1892,7 +1893,7 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 				{
 					OutPtr = OutBuffer + (((((h * HSkip[a]) + HOffset[a]) * IHDR_Width) + ((w * WSkip[a]) + WOffset[a])) * Q3IMAGE_BYTESPERPIXEL);
 
-					if(!ConvertPixel(IHDR, OutPtr, DecompPtr, HasTransparentColour, TransparentColour, OutPal))
+					if (!ConvertPixel(IHDR, OutPtr, DecompPtr, HasTransparentColour, TransparentColour, OutPal))
 					{
 						return(qfalse);
 					}
@@ -1912,20 +1913,20 @@ static qboolean DecodeImageInterlaced(struct PNG_Chunk_IHDR *IHDR,
 
 void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 {
-	struct BufferedFile *ThePNG;
-	byte *OutBuffer;
-	uint8_t *Signature;
+	struct BufferedFile    *ThePNG;
+	byte                   *OutBuffer;
+	uint8_t                *Signature;
 	struct PNG_ChunkHeader *CH;
-	uint32_t ChunkHeaderLength;
-	uint32_t ChunkHeaderType;
-	struct PNG_Chunk_IHDR *IHDR;
-	uint32_t IHDR_Width;
-	uint32_t IHDR_Height;
-	PNG_ChunkCRC *CRC;
-	uint8_t *InPal;
-	uint8_t *DecompressedData;
-	uint32_t DecompressedDataLength;
-	uint32_t i;
+	uint32_t               ChunkHeaderLength;
+	uint32_t               ChunkHeaderType;
+	struct PNG_Chunk_IHDR  *IHDR;
+	uint32_t               IHDR_Width;
+	uint32_t               IHDR_Height;
+	PNG_ChunkCRC           *CRC;
+	uint8_t                *InPal;
+	uint8_t                *DecompressedData;
+	uint32_t               DecompressedDataLength;
+	uint32_t               i;
 
 	/*
 	 *  palette with 256 RGBA entries
@@ -1938,13 +1939,13 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 */
 
 	qboolean HasTransparentColour = qfalse;
-	uint8_t TransparentColour[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+	uint8_t  TransparentColour[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 	/*
 	 *  input verification
 	 */
 
-	if(!(name && pic))
+	if (!(name && pic))
 	{
 		return;
 	}
@@ -1955,12 +1956,12 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 
 	*pic = NULL;
 
-	if(width)
+	if (width)
 	{
 		*width = 0;
 	}
 
-	if(height)
+	if (height)
 	{
 		*height = 0;
 	}
@@ -1970,17 +1971,17 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 */
 
 	ThePNG = ReadBufferedFile(name);
-	if(!ThePNG)
+	if (!ThePNG)
 	{
 		return;
-	}           
+	}
 
 	/*
 	 *  Read the siganture of the file.
 	 */
 
 	Signature = BufferedFileRead(ThePNG, PNG_Signature_Size);
-	if(!Signature)
+	if (!Signature)
 	{
 		CloseBufferedFile(ThePNG);
 
@@ -1991,11 +1992,11 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  Is it a PNG?
 	 */
 
-	if(memcmp(Signature, PNG_Signature, PNG_Signature_Size))
+	if (memcmp(Signature, PNG_Signature, PNG_Signature_Size))
 	{
 		CloseBufferedFile(ThePNG);
 
-		return; 
+		return;
 	}
 
 	/*
@@ -2003,11 +2004,11 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 */
 
 	CH = BufferedFileRead(ThePNG, PNG_ChunkHeader_Size);
-	if(!CH)
+	if (!CH)
 	{
 		CloseBufferedFile(ThePNG);
 
-		return; 
+		return;
 	}
 
 	/*
@@ -2021,23 +2022,23 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  Check if the first chunk is an IHDR.
 	 */
 
-	if(!((ChunkHeaderType == PNG_ChunkType_IHDR) && (ChunkHeaderLength == PNG_Chunk_IHDR_Size)))
+	if (!((ChunkHeaderType == PNG_ChunkType_IHDR) && (ChunkHeaderLength == PNG_Chunk_IHDR_Size)))
 	{
 		CloseBufferedFile(ThePNG);
 
-		return; 
+		return;
 	}
 
 	/*
 	 *  Read the IHDR.
-	 */ 
+	 */
 
 	IHDR = BufferedFileRead(ThePNG, PNG_Chunk_IHDR_Size);
-	if(!IHDR)
+	if (!IHDR)
 	{
 		CloseBufferedFile(ThePNG);
 
-		return; 
+		return;
 	}
 
 	/*
@@ -2045,11 +2046,11 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 */
 
 	CRC = BufferedFileRead(ThePNG, PNG_ChunkCRC_Size);
-	if(!CRC)
+	if (!CRC)
 	{
 		CloseBufferedFile(ThePNG);
 
-		return; 
+		return;
 	}
 
 	/*
@@ -2067,14 +2068,14 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  Check if Width and Height are valid.
 	 */
 
-	if(!((IHDR_Width > 0) && (IHDR_Height > 0))
-	|| IHDR_Width > INT_MAX / Q3IMAGE_BYTESPERPIXEL / IHDR_Height)
+	if (!((IHDR_Width > 0) && (IHDR_Height > 0))
+	    || IHDR_Width > INT_MAX / Q3IMAGE_BYTESPERPIXEL / IHDR_Height)
 	{
 		CloseBufferedFile(ThePNG);
 
 		Com_Printf(S_COLOR_YELLOW "%s: invalid image size\n", name);
 
-		return; 
+		return;
 	}
 
 	/*
@@ -2085,18 +2086,18 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  Check if CompressionMethod and FilterMethod are valid.
 	 */
 
-	if(!((IHDR->CompressionMethod == PNG_CompressionMethod_0) && (IHDR->FilterMethod == PNG_FilterMethod_0)))
+	if (!((IHDR->CompressionMethod == PNG_CompressionMethod_0) && (IHDR->FilterMethod == PNG_FilterMethod_0)))
 	{
 		CloseBufferedFile(ThePNG);
 
-		return; 
+		return;
 	}
 
 	/*
 	 *  Check if InterlaceMethod is valid.
 	 */
 
-	if(!((IHDR->InterlaceMethod == PNG_InterlaceMethod_NonInterlaced)  || (IHDR->InterlaceMethod == PNG_InterlaceMethod_Interlaced)))
+	if (!((IHDR->InterlaceMethod == PNG_InterlaceMethod_NonInterlaced)  || (IHDR->InterlaceMethod == PNG_InterlaceMethod_Interlaced)))
 	{
 		CloseBufferedFile(ThePNG);
 
@@ -2107,13 +2108,13 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  Read palette for an indexed image.
 	 */
 
-	if(IHDR->ColourType == PNG_ColourType_Indexed)
+	if (IHDR->ColourType == PNG_ColourType_Indexed)
 	{
 		/*
 		 *  We need the palette first.
 		 */
 
-		if(!FindChunk(ThePNG, PNG_ChunkType_PLTE))
+		if (!FindChunk(ThePNG, PNG_ChunkType_PLTE))
 		{
 			CloseBufferedFile(ThePNG);
 
@@ -2125,11 +2126,11 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 		 */
 
 		CH = BufferedFileRead(ThePNG, PNG_ChunkHeader_Size);
-		if(!CH)
+		if (!CH)
 		{
 			CloseBufferedFile(ThePNG);
 
-			return; 
+			return;
 		}
 
 		/*
@@ -2143,22 +2144,22 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 		 *  Check if the chunk is an PLTE.
 		 */
 
-		if(!(ChunkHeaderType == PNG_ChunkType_PLTE))
+		if (!(ChunkHeaderType == PNG_ChunkType_PLTE))
 		{
 			CloseBufferedFile(ThePNG);
 
-			return; 
+			return;
 		}
 
 		/*
 		 *  Check if Length is divisible by 3
 		 */
 
-		if(ChunkHeaderLength % 3)
+		if (ChunkHeaderLength % 3)
 		{
 			CloseBufferedFile(ThePNG);
 
-			return;   
+			return;
 		}
 
 		/*
@@ -2166,11 +2167,11 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 		 */
 
 		InPal = BufferedFileRead(ThePNG, ChunkHeaderLength);
-		if(!InPal)
+		if (!InPal)
 		{
 			CloseBufferedFile(ThePNG);
 
-			return; 
+			return;
 		}
 
 		/*
@@ -2178,34 +2179,34 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 		 */
 
 		CRC = BufferedFileRead(ThePNG, PNG_ChunkCRC_Size);
-		if(!CRC)
+		if (!CRC)
 		{
 			CloseBufferedFile(ThePNG);
 
-			return; 
+			return;
 		}
 
 		/*
 		 *  Set some default values.
 		 */
 
-		for(i = 0; i < 256; i++)
+		for (i = 0; i < 256; i++)
 		{
 			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 0] = 0x00;
 			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 1] = 0x00;
 			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 2] = 0x00;
-			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 3] = 0xFF;  
+			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 3] = 0xFF;
 		}
 
 		/*
 		 *  Convert to the Quake3 RGBA-format.
 		 */
 
-		for(i = 0; i < (ChunkHeaderLength / 3); i++)
+		for (i = 0; i < (ChunkHeaderLength / 3); i++)
 		{
-			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 0] = InPal[i*3+0];
-			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 1] = InPal[i*3+1];
-			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 2] = InPal[i*3+2];
+			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 0] = InPal[i * 3 + 0];
+			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 1] = InPal[i * 3 + 1];
+			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 2] = InPal[i * 3 + 2];
 			OutPal[i * Q3IMAGE_BYTESPERPIXEL + 3] = 0xFF;
 		}
 	}
@@ -2218,7 +2219,7 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  Let's see if there is a tRNS chunk
 	 */
 
-	if(FindChunk(ThePNG, PNG_ChunkType_tRNS))
+	if (FindChunk(ThePNG, PNG_ChunkType_tRNS))
 	{
 		uint8_t *Trans;
 
@@ -2227,11 +2228,11 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 		 */
 
 		CH = BufferedFileRead(ThePNG, PNG_ChunkHeader_Size);
-		if(!CH)
+		if (!CH)
 		{
 			CloseBufferedFile(ThePNG);
 
-			return; 
+			return;
 		}
 
 		/*
@@ -2245,11 +2246,11 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 		 *  Check if the chunk is an tRNS.
 		 */
 
-		if(!(ChunkHeaderType == PNG_ChunkType_tRNS))
+		if (!(ChunkHeaderType == PNG_ChunkType_tRNS))
 		{
 			CloseBufferedFile(ThePNG);
 
-			return; 
+			return;
 		}
 
 		/*
@@ -2257,11 +2258,11 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 		 */
 
 		Trans = BufferedFileRead(ThePNG, ChunkHeaderLength);
-		if(!Trans)
+		if (!Trans)
 		{
 			CloseBufferedFile(ThePNG);
 
-			return;  
+			return;
 		}
 
 		/*
@@ -2269,127 +2270,127 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 		 */
 
 		CRC = BufferedFileRead(ThePNG, PNG_ChunkCRC_Size);
-		if(!CRC)
+		if (!CRC)
 		{
 			CloseBufferedFile(ThePNG);
 
-			return; 
+			return;
 		}
 
 		/*
 		 *  Only for Grey, True and Indexed ColourType should tRNS exist.
 		 */
 
-		switch(IHDR->ColourType)
+		switch (IHDR->ColourType)
 		{
-			case PNG_ColourType_Grey :
-			{
-				if(!ChunkHeaderLength == 2)
-				{
-					CloseBufferedFile(ThePNG);
-
-					return;    
-				}
-
-				HasTransparentColour = qtrue;
-
-				/*
-				 *  Grey can have one colour which is completely transparent.
-				 *  This colour is always stored in 16 bits.
-				 */
-
-				TransparentColour[0] = Trans[0];
-				TransparentColour[1] = Trans[1];
-
-				break;
-			}
-
-			case PNG_ColourType_True :
-			{
-				if(!ChunkHeaderLength == 6)
-				{
-					CloseBufferedFile(ThePNG);
-
-					return;    
-				}
-
-				HasTransparentColour = qtrue;
-
-				/*
-				 *  True can have one colour which is completely transparent.
-				 *  This colour is always stored in 16 bits.
-				 */
-
-				TransparentColour[0] = Trans[0];
-				TransparentColour[1] = Trans[1];
-				TransparentColour[2] = Trans[2];
-				TransparentColour[3] = Trans[3];
-				TransparentColour[4] = Trans[4];
-				TransparentColour[5] = Trans[5];
-
-				break;
-			}
-
-			case PNG_ColourType_Indexed :
-			{
-				/*
-				 *  Maximum of 256 one byte transparency entries.
-				 */
-
-				if(ChunkHeaderLength > 256)
-				{
-					CloseBufferedFile(ThePNG);
-
-					return;    
-				}
-
-				HasTransparentColour = qtrue;
-
-				/*
-				 *  alpha values for palette entries
-				 */
-
-				for(i = 0; i < ChunkHeaderLength; i++)
-				{
-					OutPal[i * Q3IMAGE_BYTESPERPIXEL + 3] = Trans[i];
-				}
-
-				break;
-			}
-
-			/*
-			 *  All other ColourTypes should not have tRNS chunks
-			 */
-
-			default :
+		case PNG_ColourType_Grey:
+		{
+			if (!ChunkHeaderLength == 2)
 			{
 				CloseBufferedFile(ThePNG);
 
 				return;
 			}
-		} 
+
+			HasTransparentColour = qtrue;
+
+			/*
+			 *  Grey can have one colour which is completely transparent.
+			 *  This colour is always stored in 16 bits.
+			 */
+
+			TransparentColour[0] = Trans[0];
+			TransparentColour[1] = Trans[1];
+
+			break;
+		}
+
+		case PNG_ColourType_True:
+		{
+			if (!ChunkHeaderLength == 6)
+			{
+				CloseBufferedFile(ThePNG);
+
+				return;
+			}
+
+			HasTransparentColour = qtrue;
+
+			/*
+			 *  True can have one colour which is completely transparent.
+			 *  This colour is always stored in 16 bits.
+			 */
+
+			TransparentColour[0] = Trans[0];
+			TransparentColour[1] = Trans[1];
+			TransparentColour[2] = Trans[2];
+			TransparentColour[3] = Trans[3];
+			TransparentColour[4] = Trans[4];
+			TransparentColour[5] = Trans[5];
+
+			break;
+		}
+
+		case PNG_ColourType_Indexed:
+		{
+			/*
+			 *  Maximum of 256 one byte transparency entries.
+			 */
+
+			if (ChunkHeaderLength > 256)
+			{
+				CloseBufferedFile(ThePNG);
+
+				return;
+			}
+
+			HasTransparentColour = qtrue;
+
+			/*
+			 *  alpha values for palette entries
+			 */
+
+			for (i = 0; i < ChunkHeaderLength; i++)
+			{
+				OutPal[i * Q3IMAGE_BYTESPERPIXEL + 3] = Trans[i];
+			}
+
+			break;
+		}
+
+		/*
+		 *  All other ColourTypes should not have tRNS chunks
+		 */
+
+		default:
+		{
+			CloseBufferedFile(ThePNG);
+
+			return;
+		}
+		}
 	}
 
 	/*
 	 *  Rewind to the start of the file.
 	 */
 
-	if(!BufferedFileRewind(ThePNG, -1))
+	if (!BufferedFileRewind(ThePNG, -1))
 	{
 		CloseBufferedFile(ThePNG);
 
-		return; 
+		return;
 	}
 
 	/*
 	 *  Skip the signature
 	 */
 
-	if(!BufferedFileSkip(ThePNG, PNG_Signature_Size))
+	if (!BufferedFileSkip(ThePNG, PNG_Signature_Size))
 	{
 		CloseBufferedFile(ThePNG);
 
-		return; 
+		return;
 	}
 
 	/*
@@ -2397,7 +2398,7 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 */
 
 	DecompressedDataLength = DecompressIDATs(ThePNG, &DecompressedData);
-	if(!(DecompressedDataLength && DecompressedData))
+	if (!(DecompressedDataLength && DecompressedData))
 	{
 		CloseBufferedFile(ThePNG);
 
@@ -2408,57 +2409,57 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  Allocate output buffer.
 	 */
 
-	OutBuffer = ri.Z_Malloc(IHDR_Width * IHDR_Height * Q3IMAGE_BYTESPERPIXEL); 
-	if(!OutBuffer)
+	OutBuffer = ri.Z_Malloc(IHDR_Width * IHDR_Height * Q3IMAGE_BYTESPERPIXEL);
+	if (!OutBuffer)
 	{
-		ri.Free(DecompressedData); 
+		ri.Free(DecompressedData);
 		CloseBufferedFile(ThePNG);
 
-		return;  
+		return;
 	}
 
 	/*
 	 *  Interlaced and Non-interlaced images need to be handled differently.
 	 */
 
-	switch(IHDR->InterlaceMethod)
+	switch (IHDR->InterlaceMethod)
 	{
-		case PNG_InterlaceMethod_NonInterlaced :
+	case PNG_InterlaceMethod_NonInterlaced:
+	{
+		if (!DecodeImageNonInterlaced(IHDR, OutBuffer, DecompressedData, DecompressedDataLength, HasTransparentColour, TransparentColour, OutPal))
 		{
-			if(!DecodeImageNonInterlaced(IHDR, OutBuffer, DecompressedData, DecompressedDataLength, HasTransparentColour, TransparentColour, OutPal))
-			{
-				ri.Free(OutBuffer); 
-				ri.Free(DecompressedData); 
-				CloseBufferedFile(ThePNG);
-
-				return;
-			}
-
-			break;
-		}
-
-		case PNG_InterlaceMethod_Interlaced :
-		{
-			if(!DecodeImageInterlaced(IHDR, OutBuffer, DecompressedData, DecompressedDataLength, HasTransparentColour, TransparentColour, OutPal))
-			{
-				ri.Free(OutBuffer); 
-				ri.Free(DecompressedData); 
-				CloseBufferedFile(ThePNG);
-
-				return;
-			}
-
-			break;
-		}
-
-		default :
-		{
-			ri.Free(OutBuffer); 
-			ri.Free(DecompressedData); 
+			ri.Free(OutBuffer);
+			ri.Free(DecompressedData);
 			CloseBufferedFile(ThePNG);
 
 			return;
 		}
+
+		break;
+	}
+
+	case PNG_InterlaceMethod_Interlaced:
+	{
+		if (!DecodeImageInterlaced(IHDR, OutBuffer, DecompressedData, DecompressedDataLength, HasTransparentColour, TransparentColour, OutPal))
+		{
+			ri.Free(OutBuffer);
+			ri.Free(DecompressedData);
+			CloseBufferedFile(ThePNG);
+
+			return;
+		}
+
+		break;
+	}
+
+	default:
+	{
+		ri.Free(OutBuffer);
+		ri.Free(DecompressedData);
+		CloseBufferedFile(ThePNG);
+
+		return;
+	}
 	}
 
 	/*
@@ -2471,12 +2472,12 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  Fill width and height.
 	 */
 
-	if(width)
+	if (width)
 	{
 		*width = IHDR_Width;
 	}
 
-	if(height)
+	if (height)
 	{
 		*height = IHDR_Height;
 	}
@@ -2485,7 +2486,7 @@ void R_LoadPNG(const char *name, byte **pic, int *width, int *height)
 	 *  DecompressedData is not needed anymore.
 	 */
 
-	ri.Free(DecompressedData); 
+	ri.Free(DecompressedData);
 
 	/*
 	 *  We have all data, so close the file.

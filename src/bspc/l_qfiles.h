@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ If you have questions concerning this license or the applicable additional terms
 
 //for Sin packs
 #define MAX_PAK_FILENAME_LENGTH 120
-#define SINPAKHEADER        ( ( 'K' << 24 ) + ( 'A' << 16 ) + ( 'P' << 8 ) + 'S' )
+#define SINPAKHEADER        (('K' << 24) + ('A' << 16) + ('P' << 8) + 'S')
 
 typedef struct
 {
@@ -91,16 +91,16 @@ typedef struct quakefile_s
 } quakefile_t;
 
 //returns the file extension for the given type
-char *QuakeFileTypeExtension( int type );
+char *QuakeFileTypeExtension(int type);
 //returns the file type for the given extension
-int QuakeFileExtensionType( char *extension );
+int QuakeFileExtensionType(char *extension);
 //return the Quake file type for the given file
-int QuakeFileType( char *filename );
+int QuakeFileType(char *filename);
 //returns true if the filename complies to the filter
-int FileFilter( char *filter, char *filename, int casesensitive );
+int FileFilter(char *filter, char *filename, int casesensitive);
 //find Quake files using the given filter
-quakefile_t *FindQuakeFiles( char *filter );
+quakefile_t *FindQuakeFiles(char *filter);
 //load the given Quake file, returns the length of the file
-int LoadQuakeFile( quakefile_t *qf, void **bufferptr );
+int LoadQuakeFile(quakefile_t *qf, void **bufferptr);
 //read part of a Quake file into the buffer
-int ReadQuakeFile( quakefile_t *qf, void *buffer, int offset, int length );
+int ReadQuakeFile(quakefile_t *qf, void *buffer, int offset, int length);

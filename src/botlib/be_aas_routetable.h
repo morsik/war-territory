@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,10 +38,10 @@ If you have questions concerning this license or the applicable additional terms
 
 #define RT_DEFINED
 
-#define RTBID                       ( ( 'B' << 24 ) + ( 'T' << 16 ) + ( 'R' << 8 ) + 'X' )
+#define RTBID                       (('B' << 24) + ('T' << 16) + ('R' << 8) + 'X')
 #define RTBVERSION                  17
 
-#define RTB_BADTRAVELFLAGS          ( TFL_JUMPPAD | TFL_ROCKETJUMP | TFL_BFGJUMP | TFL_GRAPPLEHOOK | TFL_DOUBLEJUMP | TFL_RAMPJUMP | TFL_STRAFEJUMP | TFL_LAVA )    //----(SA)	modified since slime is no longer deadly
+#define RTB_BADTRAVELFLAGS          (TFL_JUMPPAD | TFL_ROCKETJUMP | TFL_BFGJUMP | TFL_GRAPPLEHOOK | TFL_DOUBLEJUMP | TFL_RAMPJUMP | TFL_STRAFEJUMP | TFL_LAVA)      //----(SA)	modified since slime is no longer deadly
 //#define RTB_BADTRAVELFLAGS			(TFL_JUMPPAD|TFL_ROCKETJUMP|TFL_BFGJUMP|TFL_GRAPPLEHOOK|TFL_DOUBLEJUMP|TFL_RAMPJUMP|TFL_STRAFEJUMP|TFL_SLIME|TFL_LAVA)
 
 #define MAX_VISIBLE_AREAS   1024    // going over this limit will result in excessive memory usage, try and keep RANGE low enough so this limit won't be reached
@@ -90,19 +90,19 @@ typedef struct
 // this is what each aasworld attaches itself to
 typedef struct
 {
-	unsigned short int          *areaChildIndexes;  // each aas area that is part of the Route-Table has a pointer here to their position in the list of children
+	unsigned short int *areaChildIndexes;           // each aas area that is part of the Route-Table has a pointer here to their position in the list of children
 
 	int numChildren;
-	aas_rt_child_t              *children;
+	aas_rt_child_t *children;
 
 	int numParents;
-	aas_rt_parent_t             *parents;
+	aas_rt_parent_t *parents;
 
 	int numParentChildren;
-	unsigned short int          *parentChildren;
+	unsigned short int *parentChildren;
 
 	int numVisibleParents;
-	unsigned short int          *visibleParents;
+	unsigned short int *visibleParents;
 
 //	int							numLocalRoutes;
 //	aas_rt_route_t				*localRoutes;		// the list of routes to all other local areas
@@ -111,7 +111,7 @@ typedef struct
 //	unsigned char				*parentRoutes;		// reachability to each other parent, as an offset from our first reachability
 
 	int numParentLinks;
-	aas_rt_parent_link_t        *parentLinks;       // links from each child to the parent's it belongs to
+	aas_rt_parent_link_t *parentLinks;              // links from each child to the parent's it belongs to
 
 //	int							numParentTravelTimes;
 //	unsigned short int			*parentTravelTimes;	// travel times between all parent areas
@@ -129,7 +129,7 @@ typedef struct
 {
 	unsigned short int numvisible;          // number of areas that are visible and within range
 	unsigned short int
-	visible[MAX_VISIBLE_AREAS];             // list of area indexes of visible and within range areas
+	    visible[MAX_VISIBLE_AREAS];         // list of area indexes of visible and within range areas
 } aas_area_buildlocalinfo_t;
 
 typedef struct aas_parent_link_s
@@ -144,28 +144,27 @@ typedef struct
 {
 	unsigned short int areanum;
 	unsigned short int numlocal;
-	aas_parent_link_t   *parentlink;        // linked list of parents that we belong to
-	aas_rt_route_t      *localroutes;       // the list of routes to all other local areas
-	aas_rt_route_t      *parentroutes;      // the list of routes to all other parent areas
+	aas_parent_link_t *parentlink;          // linked list of parents that we belong to
+	aas_rt_route_t *localroutes;            // the list of routes to all other local areas
+	aas_rt_route_t *parentroutes;           // the list of routes to all other parent areas
 } aas_area_childlocaldata_t;
 
 typedef struct
 {
 	unsigned short int areanum;                                 // out area number in the global list
 	unsigned short int numchildren;
-	unsigned short int  *children;
+	unsigned short int *children;
 	unsigned short int numVisibleParents;
-	unsigned short int  *visibleParents;        // list of other parents that we can see (used for fast hide/retreat checks)
+	unsigned short int *visibleParents;         // list of other parents that we can see (used for fast hide/retreat checks)
 } aas_area_parent_t;
 
 #endif  // RT_DEFINED
 
 //....................................................................
 
-void AAS_RT_BuildRouteTable( void );
-void AAS_RT_ShowRoute( vec3_t srcpos, int srcnum, int destnum );
-aas_rt_route_t *AAS_RT_GetRoute( int srcnum, vec3_t origin, int destnum );
-void AAS_RT_ShutdownRouteTable( void );
-qboolean AAS_RT_GetHidePos( vec3_t srcpos, int srcnum, int srcarea, vec3_t destpos, int destnum, int destarea, vec3_t returnPos );
-int AAS_RT_GetReachabilityIndex( int areanum, int reachIndex );
-
+void AAS_RT_BuildRouteTable(void);
+void AAS_RT_ShowRoute(vec3_t srcpos, int srcnum, int destnum);
+aas_rt_route_t *AAS_RT_GetRoute(int srcnum, vec3_t origin, int destnum);
+void AAS_RT_ShutdownRouteTable(void);
+qboolean AAS_RT_GetHidePos(vec3_t srcpos, int srcnum, int srcarea, vec3_t destpos, int destnum, int destarea, vec3_t returnPos);
+int AAS_RT_GetReachabilityIndex(int areanum, int reachIndex);

@@ -46,16 +46,16 @@ If you have questions concerning this license or the applicable additional terms
 #endif
 
 #if (defined(powerc) || defined(powerpc) || defined(ppc) || \
-	defined(__ppc) || defined(__ppc__)) && !defined(C_ONLY)
+    defined(__ppc) || defined(__ppc__)) && !defined(C_ONLY)
 #define idppc 1
 #if defined(__VEC__)
 #define idppc_altivec 1
 #ifdef MACOS_X  // Apple's GCC does this differently than the FSF.
-#define VECCONST_UINT8(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) \
-	(vector unsigned char) (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
+#define VECCONST_UINT8(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
+    (vector unsigned char) (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
 #else
-#define VECCONST_UINT8(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) \
-	(vector unsigned char) {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p}
+#define VECCONST_UINT8(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
+    (vector unsigned char) {a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p }
 #endif
 #else
 #define idppc_altivec 0
@@ -85,7 +85,7 @@ If you have questions concerning this license or the applicable additional terms
 #undef QDECL
 #define QDECL __cdecl
 
-#if defined( _MSC_VER )
+#if defined(_MSC_VER)
 #define OS_STRING "win_msvc64"
 #elif defined __MINGW64__
 #define OS_STRING "win_mingw64"
@@ -94,7 +94,7 @@ If you have questions concerning this license or the applicable additional terms
 #define ID_INLINE inline
 #define PATH_SEP '\\'
 
-#if defined( __WIN64__ ) 
+#if defined(__WIN64__)
 #define ARCH_STRING "x86_64"
 #elif defined _M_ALPHA
 #define ARCH_STRING "AXP"
@@ -109,7 +109,7 @@ If you have questions concerning this license or the applicable additional terms
 #undef QDECL
 #define QDECL __cdecl
 
-#if defined( _MSC_VER )
+#if defined(_MSC_VER)
 #define OS_STRING "win_msvc"
 #elif defined __MINGW32__
 #define OS_STRING "win_mingw"
@@ -118,7 +118,7 @@ If you have questions concerning this license or the applicable additional terms
 #define ID_INLINE __inline
 #define PATH_SEP '\\'
 
-#if defined( _M_IX86 ) || defined( __i386__ )
+#if defined(_M_IX86) || defined(__i386__)
 #define ARCH_STRING "x86"
 #elif defined _M_ALPHA
 #define ARCH_STRING "AXP"
@@ -265,9 +265,9 @@ If you have questions concerning this license or the applicable additional terms
 #define ARCH_STRING "sparc"
 #endif
 
-#if defined( _BIG_ENDIAN )
+#if defined(_BIG_ENDIAN)
 #define Q3_BIG_ENDIAN
-#elif defined( _LITTLE_ENDIAN )
+#elif defined(_LITTLE_ENDIAN)
 #define Q3_LITTLE_ENDIAN
 #endif
 
@@ -308,11 +308,11 @@ If you have questions concerning this license or the applicable additional terms
 //===========================================================================
 
 //catch missing defines in above blocks
-#if !defined( OS_STRING )
+#if !defined(OS_STRING)
 #error "Operating system not supported"
 #endif
 
-#if !defined( ARCH_STRING )
+#if !defined(ARCH_STRING)
 #error "Architecture not supported"
 #endif
 
@@ -330,13 +330,13 @@ If you have questions concerning this license or the applicable additional terms
 
 
 //endianness
-short ShortSwap (short l);
-int LongSwap (int l);
-float FloatSwap (const float *f);
+short ShortSwap(short l);
+int LongSwap(int l);
+float FloatSwap(const float *f);
 
-#if defined( Q3_BIG_ENDIAN ) && defined( Q3_LITTLE_ENDIAN )
+#if defined(Q3_BIG_ENDIAN) && defined(Q3_LITTLE_ENDIAN)
 #error "Endianness defined as both big and little"
-#elif defined( Q3_BIG_ENDIAN )
+#elif defined(Q3_BIG_ENDIAN)
 
 #define LittleShort(x) ShortSwap(x)
 #define LittleLong(x) LongSwap(x)
@@ -345,7 +345,7 @@ float FloatSwap (const float *f);
 #define BigLong
 #define BigFloat
 
-#elif defined( Q3_LITTLE_ENDIAN )
+#elif defined(Q3_LITTLE_ENDIAN)
 
 #define LittleShort
 #define LittleLong
@@ -354,7 +354,7 @@ float FloatSwap (const float *f);
 #define BigLong(x) LongSwap(x)
 #define BigFloat(x) FloatSwap(&x)
 
-#elif defined( Q3_VM )
+#elif defined(Q3_VM)
 
 #define LittleShort
 #define LittleLong

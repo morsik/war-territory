@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -78,8 +78,8 @@ typedef struct tmp_area_s
 	int invalid;                        //true if the area is invalid
 	tmp_areasettings_t *settings;       //area settings
 	struct tmp_area_s *mergedarea;      //points to the new area after merging
-										//when mergedarea != 0 the area has only the
-										//seperating face of the merged areas
+	                                    //when mergedarea != 0 the area has only the
+	                                    //seperating face of the merged areas
 	int aasareanum;                     //number of the aas area created for this tmp area
 	//links in the list with areas
 	struct tmp_area_s *l_prev, *l_next;
@@ -126,28 +126,28 @@ typedef struct tmp_aas_s
 extern tmp_aas_t tmpaasworld;
 
 //creates a .AAS file with the given name from an already loaded map
-void AAS_Create( char *aasfile );
+void AAS_Create(char *aasfile);
 //adds a face side to an area
-void AAS_AddFaceSideToArea( tmp_face_t *tmpface, int side, tmp_area_t *tmparea );
+void AAS_AddFaceSideToArea(tmp_face_t *tmpface, int side, tmp_area_t *tmparea);
 //remvoes a face from an area
-void AAS_RemoveFaceFromArea( tmp_face_t *tmpface, tmp_area_t *tmparea );
+void AAS_RemoveFaceFromArea(tmp_face_t *tmpface, tmp_area_t *tmparea);
 //allocate a tmp face
-tmp_face_t *AAS_AllocTmpFace( void );
+tmp_face_t *AAS_AllocTmpFace(void);
 //free the tmp face
-void AAS_FreeTmpFace( tmp_face_t *tmpface );
+void AAS_FreeTmpFace(tmp_face_t *tmpface);
 //allocate a tmp area
-tmp_area_t *AAS_AllocTmpArea( void );
+tmp_area_t *AAS_AllocTmpArea(void);
 //free a tmp area
-void AAS_FreeTmpArea( tmp_area_t *tmparea );
+void AAS_FreeTmpArea(tmp_area_t *tmparea);
 //allocate a tmp node
-tmp_node_t *AAS_AllocTmpNode( void );
+tmp_node_t *AAS_AllocTmpNode(void);
 //free a tmp node
-void AAS_FreeTmpNode( tmp_node_t *node );
+void AAS_FreeTmpNode(tmp_node_t *node);
 //checks if an area is ok
-void AAS_CheckArea( tmp_area_t *tmparea );
+void AAS_CheckArea(tmp_area_t *tmparea);
 //flips the area faces where needed
-void AAS_FlipAreaFaces( tmp_area_t *tmparea );
+void AAS_FlipAreaFaces(tmp_area_t *tmparea);
 //returns true if the face is a gap seen from the given side
-int AAS_GapFace( tmp_face_t *tmpface, int side );
+int AAS_GapFace(tmp_face_t *tmpface, int side);
 //returns true if the face is a ground face
-int AAS_GroundFace( tmp_face_t *tmpface );
+int AAS_GroundFace(tmp_face_t *tmpface);

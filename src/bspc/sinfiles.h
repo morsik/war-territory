@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ If you have questions concerning this license or the applicable additional terms
 #define SIN_MAX_MAP_MODELS      1024
 #define SIN_MAX_MAP_BRUSHES     8192
 #define SIN_MAX_MAP_ENTITIES    4096
-#define SIN_MAX_MAP_ENTSTRING   ( 128 * SIN_MAX_MAP_ENTITIES )
+#define SIN_MAX_MAP_ENTSTRING   (128 * SIN_MAX_MAP_ENTITIES)
 #define SIN_MAX_MAP_TEXINFO     8192
 
 #define SIN_MAX_MAP_AREAS       256
@@ -123,7 +123,7 @@ typedef struct
 	float origin[3];            // for sounds or lights
 	int headnode;
 	int firstface, numfaces;            // submodels just draw faces
-										// without walking the bsp tree
+	                                    // without walking the bsp tree
 } sin_dmodel_t;
 
 typedef struct
@@ -214,27 +214,27 @@ typedef struct
 #define  SURF_TYPE_BIT3       0x40000000  // 3 bit of surface type
 
 #define SURF_START_BIT        27
-#define SURFACETYPE_FROM_FLAGS( x ) ( ( x >> ( SURF_START_BIT ) ) & 0xf )
+#define SURFACETYPE_FROM_FLAGS(x) ((x >> (SURF_START_BIT)) & 0xf)
 
 
-#define  SURF_TYPE_SHIFT( x )   ( ( x ) << ( SURF_START_BIT ) ) // macro for getting proper bit mask
+#define  SURF_TYPE_SHIFT(x)   ((x) << (SURF_START_BIT))         // macro for getting proper bit mask
 
-#define  SURF_TYPE_NONE       SURF_TYPE_SHIFT( 0 )
-#define  SURF_TYPE_WOOD       SURF_TYPE_SHIFT( 1 )
-#define  SURF_TYPE_METAL      SURF_TYPE_SHIFT( 2 )
-#define  SURF_TYPE_STONE      SURF_TYPE_SHIFT( 3 )
-#define  SURF_TYPE_CONCRETE   SURF_TYPE_SHIFT( 4 )
-#define  SURF_TYPE_DIRT       SURF_TYPE_SHIFT( 5 )
-#define  SURF_TYPE_FLESH      SURF_TYPE_SHIFT( 6 )
-#define  SURF_TYPE_GRILL      SURF_TYPE_SHIFT( 7 )
-#define  SURF_TYPE_GLASS      SURF_TYPE_SHIFT( 8 )
-#define  SURF_TYPE_FABRIC     SURF_TYPE_SHIFT( 9 )
-#define  SURF_TYPE_MONITOR    SURF_TYPE_SHIFT( 10 )
-#define  SURF_TYPE_GRAVEL     SURF_TYPE_SHIFT( 11 )
-#define  SURF_TYPE_VEGETATION SURF_TYPE_SHIFT( 12 )
-#define  SURF_TYPE_PAPER      SURF_TYPE_SHIFT( 13 )
-#define  SURF_TYPE_DUCT       SURF_TYPE_SHIFT( 14 )
-#define  SURF_TYPE_WATER      SURF_TYPE_SHIFT( 15 )
+#define  SURF_TYPE_NONE       SURF_TYPE_SHIFT(0)
+#define  SURF_TYPE_WOOD       SURF_TYPE_SHIFT(1)
+#define  SURF_TYPE_METAL      SURF_TYPE_SHIFT(2)
+#define  SURF_TYPE_STONE      SURF_TYPE_SHIFT(3)
+#define  SURF_TYPE_CONCRETE   SURF_TYPE_SHIFT(4)
+#define  SURF_TYPE_DIRT       SURF_TYPE_SHIFT(5)
+#define  SURF_TYPE_FLESH      SURF_TYPE_SHIFT(6)
+#define  SURF_TYPE_GRILL      SURF_TYPE_SHIFT(7)
+#define  SURF_TYPE_GLASS      SURF_TYPE_SHIFT(8)
+#define  SURF_TYPE_FABRIC     SURF_TYPE_SHIFT(9)
+#define  SURF_TYPE_MONITOR    SURF_TYPE_SHIFT(10)
+#define  SURF_TYPE_GRAVEL     SURF_TYPE_SHIFT(11)
+#define  SURF_TYPE_VEGETATION SURF_TYPE_SHIFT(12)
+#define  SURF_TYPE_PAPER      SURF_TYPE_SHIFT(13)
+#define  SURF_TYPE_DUCT       SURF_TYPE_SHIFT(14)
+#define  SURF_TYPE_WATER      SURF_TYPE_SHIFT(15)
 #endif
 
 

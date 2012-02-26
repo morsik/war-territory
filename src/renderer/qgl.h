@@ -30,17 +30,17 @@ If you have questions concerning this license or the applicable additional terms
 #define __QGL_H__
 
 #ifdef USE_LOCAL_HEADERS
-#	include "SDL_opengl.h"
+#   include "SDL_opengl.h"
 #else
-#	include <SDL_opengl.h>
+#   include <SDL_opengl.h>
 #endif
 
-extern void (APIENTRYP qglActiveTextureARB) (GLenum texture);
-extern void (APIENTRYP qglClientActiveTextureARB) (GLenum texture);
-extern void (APIENTRYP qglMultiTexCoord2fARB) (GLenum target, GLfloat s, GLfloat t);
+extern void (APIENTRYP qglActiveTextureARB)(GLenum texture);
+extern void (APIENTRYP qglClientActiveTextureARB)(GLenum texture);
+extern void (APIENTRYP qglMultiTexCoord2fARB)(GLenum target, GLfloat s, GLfloat t);
 
-extern void (APIENTRYP qglLockArraysEXT) (GLint first, GLsizei count);
-extern void (APIENTRYP qglUnlockArraysEXT) (void);
+extern void (APIENTRYP qglLockArraysEXT)(GLint first, GLsizei count);
+extern void (APIENTRYP qglUnlockArraysEXT)(void);
 
 
 //===========================================================================

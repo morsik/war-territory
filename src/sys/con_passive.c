@@ -37,7 +37,7 @@ If you have questions concerning this license or the applicable additional terms
 CON_Shutdown
 ==================
 */
-void CON_Shutdown( void )
+void CON_Shutdown(void)
 {
 }
 
@@ -46,7 +46,7 @@ void CON_Shutdown( void )
 CON_Init
 ==================
 */
-void CON_Init( void )
+void CON_Init(void)
 {
 }
 
@@ -55,7 +55,7 @@ void CON_Init( void )
 CON_Input
 ==================
 */
-char *CON_Input( void )
+char *CON_Input(void)
 {
 	return NULL;
 }
@@ -65,10 +65,14 @@ char *CON_Input( void )
 CON_Print
 ==================
 */
-void CON_Print( const char *msg )
+void CON_Print(const char *msg)
 {
-	if( com_ansiColor && com_ansiColor->integer )
-		Sys_AnsiColorPrint( msg );
+	if (com_ansiColor && com_ansiColor->integer)
+	{
+		Sys_AnsiColorPrint(msg);
+	}
 	else
-		fputs( msg, stderr );
+	{
+		fputs(msg, stderr);
+	}
 }

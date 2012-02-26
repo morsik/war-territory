@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -43,12 +43,14 @@ If you have questions concerning this license or the applicable additional terms
 // enable to make the collision detection a bunch faster
 #define MRE_OPTIMIZE
 
-typedef struct {
-	cplane_t    *plane;
+typedef struct
+{
+	cplane_t *plane;
 	int children[2];                // negative numbers are leafs
 } cNode_t;
 
-typedef struct {
+typedef struct
+{
 	int cluster;
 	int area;
 
@@ -59,84 +61,90 @@ typedef struct {
 	int numLeafSurfaces;
 } cLeaf_t;
 
-typedef struct cmodel_s {
+typedef struct cmodel_s
+{
 	vec3_t mins, maxs;
 	cLeaf_t leaf;               // submodels don't reference the main tree
 } cmodel_t;
 
-typedef struct {
-	cplane_t    *plane;
+typedef struct
+{
+	cplane_t *plane;
 	int surfaceFlags;
 	int shaderNum;
 } cbrushside_t;
 
-typedef struct {
+typedef struct
+{
 	int shaderNum;              // the shader that determined the contents
 	int contents;
 	vec3_t bounds[2];
 	int numsides;
-	cbrushside_t    *sides;
+	cbrushside_t *sides;
 	int checkcount;             // to avoid repeated testings
 } cbrush_t;
 
 
-typedef struct {
+typedef struct
+{
 	int checkcount;                     // to avoid repeated testings
 	int surfaceFlags;
 	int contents;
-	struct patchCollide_s   *pc;
+	struct patchCollide_s *pc;
 } cPatch_t;
 
 
-typedef struct {
+typedef struct
+{
 	int floodnum;
 	int floodvalid;
 } cArea_t;
 
-typedef struct {
+typedef struct
+{
 	char name[MAX_QPATH];
 
 	int numShaders;
-	dshader_t   *shaders;
+	dshader_t *shaders;
 
 	int numBrushSides;
 	cbrushside_t *brushsides;
 
 	int numPlanes;
-	cplane_t    *planes;
+	cplane_t *planes;
 
 	int numNodes;
-	cNode_t     *nodes;
+	cNode_t *nodes;
 
 	int numLeafs;
-	cLeaf_t     *leafs;
+	cLeaf_t *leafs;
 
 	int numLeafBrushes;
-	int         *leafbrushes;
+	int *leafbrushes;
 
 	int numLeafSurfaces;
-	int         *leafsurfaces;
+	int *leafsurfaces;
 
 	int numSubModels;
-	cmodel_t    *cmodels;
+	cmodel_t *cmodels;
 
 	int numBrushes;
-	cbrush_t    *brushes;
+	cbrush_t *brushes;
 
 	int numClusters;
 	int clusterBytes;
-	byte        *visibility;
+	byte *visibility;
 	qboolean vised;             // if false, visibility is just a single cluster of ffs
 
 	int numEntityChars;
-	char        *entityString;
+	char *entityString;
 
 	int numAreas;
-	cArea_t     *areas;
-	int         *areaPortals;   // [ numAreas*numAreas ] reference counts
+	cArea_t *areas;
+	int *areaPortals;           // [ numAreas*numAreas ] reference counts
 
 	int numSurfaces;
-	cPatch_t    **surfaces;         // non-patches will be NULL
+	cPatch_t **surfaces;            // non-patches will be NULL
 
 	int floodvalid;
 	int checkcount;                         // incremented on each trace
@@ -145,15 +153,15 @@ typedef struct {
 
 // keep 1/8 unit away to keep the position valid before network snapping
 // and to avoid various numeric issues
-#define SURFACE_CLIP_EPSILON    ( 0.125 )
+#define SURFACE_CLIP_EPSILON    (0.125)
 
 extern clipMap_t cm;
-extern int c_pointcontents;
-extern int c_traces, c_brush_traces, c_patch_traces;
-extern cvar_t      *cm_noAreas;
-extern cvar_t      *cm_noCurves;
-extern cvar_t      *cm_playerCurveClip;
-extern cvar_t      *cm_optimize;
+extern int       c_pointcontents;
+extern int       c_traces, c_brush_traces, c_patch_traces;
+extern cvar_t    *cm_noAreas;
+extern cvar_t    *cm_noCurves;
+extern cvar_t    *cm_playerCurveClip;
+extern cvar_t    *cm_optimize;
 
 // cm_test.c
 
@@ -166,7 +174,8 @@ typedef struct
 	vec3_t offset;
 } sphere_t;
 
-typedef struct {
+typedef struct
+{
 	vec3_t start;
 	vec3_t end;
 	vec3_t size[2];         // size of the box being swept through the model
@@ -188,29 +197,30 @@ typedef struct {
 #endif
 } traceWork_t;
 
-typedef struct leafList_s {
+typedef struct leafList_s
+{
 	int count;
 	int maxcount;
 	qboolean overflowed;
-	int     *list;
+	int *list;
 	vec3_t bounds[2];
 	int lastLeaf;           // for overflows where each leaf can't be stored individually
-	void ( *storeLeafs )( struct leafList_s *ll, int nodenum );
+	void (*storeLeafs)(struct leafList_s *ll, int nodenum);
 } leafList_t;
 
 
-int CM_BoxBrushes( const vec3_t mins, const vec3_t maxs, cbrush_t **list, int listsize );
+int CM_BoxBrushes(const vec3_t mins, const vec3_t maxs, cbrush_t **list, int listsize);
 
-void CM_StoreLeafs( leafList_t *ll, int nodenum );
-void CM_StoreBrushes( leafList_t *ll, int nodenum );
+void CM_StoreLeafs(leafList_t *ll, int nodenum);
+void CM_StoreBrushes(leafList_t *ll, int nodenum);
 
-void CM_BoxLeafnums_r( leafList_t *ll, int nodenum );
+void CM_BoxLeafnums_r(leafList_t *ll, int nodenum);
 
-cmodel_t    *CM_ClipHandleToModel( clipHandle_t handle );
+cmodel_t *CM_ClipHandleToModel(clipHandle_t handle);
 
 // cm_patch.c
 
-struct patchCollide_s   *CM_GeneratePatchCollide( int width, int height, vec3_t *points, qboolean addBevels );
-void CM_TraceThroughPatchCollide( traceWork_t *tw, const struct patchCollide_s *pc );
-qboolean CM_PositionTestInPatchCollide( traceWork_t *tw, const struct patchCollide_s *pc );
-void CM_ClearLevelPatches( void );
+struct patchCollide_s *CM_GeneratePatchCollide(int width, int height, vec3_t *points, qboolean addBevels);
+void CM_TraceThroughPatchCollide(traceWork_t *tw, const struct patchCollide_s *pc);
+qboolean CM_PositionTestInPatchCollide(traceWork_t *tw, const struct patchCollide_s *pc);
+void CM_ClearLevelPatches(void);

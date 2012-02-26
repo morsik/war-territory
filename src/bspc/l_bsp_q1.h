@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 #define Q1_MAX_MAP_MODELS       256
 #define Q1_MAX_MAP_BRUSHES      4096
 #define Q1_MAX_MAP_ENTITIES     4096
-#define Q1_MAX_MAP_ENTSTRING    ( 128 * Q1_MAX_MAP_ENTITIES )
+#define Q1_MAX_MAP_ENTSTRING    (128 * Q1_MAX_MAP_ENTITIES)
 
 #define Q1_MAX_MAP_PLANES       8192
 #define Q1_MAX_MAP_NODES        32767       // because negative shorts are contents
@@ -225,58 +225,58 @@ typedef struct
 
 // the utilities get to be lazy and just use large static arrays
 
-extern int q1_nummodels;
-extern q1_dmodel_t     *q1_dmodels; //[MAX_MAP_MODELS];
+extern int         q1_nummodels;
+extern q1_dmodel_t *q1_dmodels;     //[MAX_MAP_MODELS];
 
-extern int q1_visdatasize;
-extern byte                *q1_dvisdata; //[MAX_MAP_VISIBILITY];
+extern int  q1_visdatasize;
+extern byte *q1_dvisdata;                //[MAX_MAP_VISIBILITY];
 
-extern int q1_lightdatasize;
-extern byte                *q1_dlightdata; //[MAX_MAP_LIGHTING];
+extern int  q1_lightdatasize;
+extern byte *q1_dlightdata;                //[MAX_MAP_LIGHTING];
 
-extern int q1_texdatasize;
-extern byte                *q1_dtexdata; //[MAX_MAP_MIPTEX]; // (dmiptexlump_t)
+extern int  q1_texdatasize;
+extern byte *q1_dtexdata;                //[MAX_MAP_MIPTEX]; // (dmiptexlump_t)
 
-extern int q1_entdatasize;
-extern char                *q1_dentdata; //[MAX_MAP_ENTSTRING];
+extern int  q1_entdatasize;
+extern char *q1_dentdata;                //[MAX_MAP_ENTSTRING];
 
-extern int q1_numleafs;
-extern q1_dleaf_t      *q1_dleafs; //[MAX_MAP_LEAFS];
+extern int        q1_numleafs;
+extern q1_dleaf_t *q1_dleafs;      //[MAX_MAP_LEAFS];
 
-extern int q1_numplanes;
-extern q1_dplane_t     *q1_dplanes; //[MAX_MAP_PLANES];
+extern int         q1_numplanes;
+extern q1_dplane_t *q1_dplanes;     //[MAX_MAP_PLANES];
 
-extern int q1_numvertexes;
-extern q1_dvertex_t    *q1_dvertexes; //[MAX_MAP_VERTS];
+extern int          q1_numvertexes;
+extern q1_dvertex_t *q1_dvertexes;    //[MAX_MAP_VERTS];
 
-extern int q1_numnodes;
-extern q1_dnode_t      *q1_dnodes; //[MAX_MAP_NODES];
+extern int        q1_numnodes;
+extern q1_dnode_t *q1_dnodes;      //[MAX_MAP_NODES];
 
-extern int q1_numtexinfo;
-extern q1_texinfo_t    *q1_texinfo; //[MAX_MAP_TEXINFO];
+extern int          q1_numtexinfo;
+extern q1_texinfo_t *q1_texinfo;    //[MAX_MAP_TEXINFO];
 
-extern int q1_numfaces;
-extern q1_dface_t      *q1_dfaces; //[MAX_MAP_FACES];
+extern int        q1_numfaces;
+extern q1_dface_t *q1_dfaces;      //[MAX_MAP_FACES];
 
-extern int q1_numclipnodes;
-extern q1_dclipnode_t  *q1_dclipnodes; //[MAX_MAP_CLIPNODES];
+extern int            q1_numclipnodes;
+extern q1_dclipnode_t *q1_dclipnodes;  //[MAX_MAP_CLIPNODES];
 
-extern int q1_numedges;
-extern q1_dedge_t      *q1_dedges; //[MAX_MAP_EDGES];
+extern int        q1_numedges;
+extern q1_dedge_t *q1_dedges;      //[MAX_MAP_EDGES];
 
-extern int q1_nummarksurfaces;
-extern unsigned short  *q1_dmarksurfaces; //[MAX_MAP_MARKSURFACES];
+extern int            q1_nummarksurfaces;
+extern unsigned short *q1_dmarksurfaces;  //[MAX_MAP_MARKSURFACES];
 
 extern int q1_numsurfedges;
-extern int             *q1_dsurfedges; //[MAX_MAP_SURFEDGES];
+extern int *q1_dsurfedges;             //[MAX_MAP_SURFEDGES];
 
 
-void Q1_AllocMaxBSP( void );
-void Q1_FreeMaxBSP( void );
-void Q1_LoadBSPFile( char *filename, int offset, int length );
-void Q1_WriteBSPFile( char *filename );
-void Q1_PrintBSPFileSizes( void );
-void Q1_ParseEntities( void );
-void Q1_UnparseEntities( void );
+void Q1_AllocMaxBSP(void);
+void Q1_FreeMaxBSP(void);
+void Q1_LoadBSPFile(char *filename, int offset, int length);
+void Q1_WriteBSPFile(char *filename);
+void Q1_PrintBSPFileSizes(void);
+void Q1_ParseEntities(void);
+void Q1_UnparseEntities(void);
 
 #endif

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ If you have questions concerning this license or the applicable additional terms
 
 //#define DEBUG			//debug code
 #define RANDOMIZE       //randomize bot behaviour
-#if defined( WIN32 ) || defined( _WIN32 )
+#if defined(WIN32) || defined(_WIN32)
 #define AASZIP          //allow reading directly from aasX.zip files
 #endif
 #define QUAKE2          //bot for Quake2
@@ -86,9 +86,8 @@ typedef struct botlib_globals_s
 //==========================================================
 
 extern botlib_globals_t botlibglobals;
-extern botlib_import_t botimport;
-extern int bot_developer;                   //true if developer is on
+extern botlib_import_t  botimport;
+extern int              bot_developer;      //true if developer is on
 
 //
-int Sys_MilliSeconds( void );
-
+int Sys_MilliSeconds(void);

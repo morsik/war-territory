@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -70,12 +70,14 @@ properly.
 #define MAX_FACETS          1024
 #define MAX_PATCH_PLANES    2048
 
-typedef struct {
+typedef struct
+{
 	float plane[4];
 	int signbits;           // signx + (signy<<1) + (signz<<2), used as lookup during collision
 } patchPlane_t;
 
-typedef struct {
+typedef struct
+{
 	int surfacePlane;
 	int numBorders;             // 3 or four + 6 axial bevels + 4 or 3 * 4 edge bevels
 	int borderPlanes[4 + 6 + 16];
@@ -83,10 +85,11 @@ typedef struct {
 	qboolean borderNoAdjust[4 + 6 + 16];
 } facet_t;
 
-typedef struct patchCollide_s {
+typedef struct patchCollide_s
+{
 	vec3_t bounds[2];
 	int numPlanes;              // surface planes plus edge planes
-	patchPlane_t    *planes;
+	patchPlane_t *planes;
 	int numFacets;
 	facet_t *facets;
 } patchCollide_t;
@@ -94,7 +97,8 @@ typedef struct patchCollide_s {
 
 #define MAX_GRID_SIZE   129
 
-typedef struct {
+typedef struct
+{
 	int width;
 	int height;
 	qboolean wrapWidth;
@@ -107,4 +111,4 @@ typedef struct {
 #define WRAP_POINT_EPSILON  0.1
 
 
-struct patchCollide_s   *CM_GeneratePatchCollide( int width, int height, vec3_t *points, qboolean addBevels );
+struct patchCollide_s *CM_GeneratePatchCollide(int width, int height, vec3_t *points, qboolean addBevels);

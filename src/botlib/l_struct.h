@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -70,12 +70,10 @@ typedef struct structdef_s
 } structdef_t;
 
 //read a structure from a script
-int ReadStructure( source_t *source, structdef_t *def, char *structure );
+int ReadStructure(source_t *source, structdef_t *def, char *structure);
 //write a structure to a file
-int WriteStructure( FILE *fp, structdef_t *def, char *structure );
+int WriteStructure(FILE *fp, structdef_t *def, char *structure);
 //writes indents
-int WriteIndent( FILE *fp, int indent );
+int WriteIndent(FILE *fp, int indent);
 //writes a float without traling zeros
-int WriteFloat( FILE *fp, float value );
-
-
+int WriteFloat(FILE *fp, float value);

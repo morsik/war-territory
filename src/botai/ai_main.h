@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -126,7 +126,7 @@ typedef struct bot_waypoint_s
 	struct      bot_waypoint_s *next, *prev;
 } bot_waypoint_t;
 
-#define BWPOFS( x ) ( (int)&( ( (bot_waypoint_t *)0 )->x ) )
+#define BWPOFS(x) ((int)&(((bot_waypoint_t *)0)->x))
 
 #define MAX_VCHATS  16
 
@@ -190,7 +190,7 @@ typedef struct
 // script autonomy values
 typedef enum
 {
-	BSA_NOVALUE = -1,
+	BSA_NOVALUE       = -1,
 	BSA_IGNOREENEMIES = 0,
 	BSA_MAINTAINSCRIPT,
 	BSA_NOCHASE,
@@ -234,7 +234,8 @@ typedef enum
 // End		TAT 9/23/2002
 
 //
-typedef enum {
+typedef enum
+{
 	BSMT_DEFAULT,
 	BSMT_WALKING,
 	BSMT_CROUCHING,
@@ -242,18 +243,18 @@ typedef enum {
 //
 typedef struct
 {
-	char    *actionString;
-	qboolean ( *actionFunc )( struct bot_state_s *bs, char *params );
+	char *actionString;
+	qboolean (*actionFunc)(struct bot_state_s *bs, char *params);
 } bot_script_stack_action_t;
 //
 typedef struct
 {
 	// set during script parsing
-	bot_script_stack_action_t       *action;            // points to an action to perform
-	char                            *params;
+	bot_script_stack_action_t *action;                  // points to an action to perform
+	char *params;
 	// debugging info
 	int lineNum;
-	char                            *text;              // points to the item location in global script buffer
+	char *text;                                         // points to the item location in global script buffer
 } bot_script_stack_item_t;
 //
 typedef struct
@@ -265,17 +266,17 @@ typedef struct
 typedef struct
 {
 	int eventNum;                           // index in scriptEvents[]
-	char                *params;            // trigger targetname, etc
+	char *params;                           // trigger targetname, etc
 	bot_script_stack_t stack;
 	// debugging info
 	int lineNum;
-	char                            *text;              // points to the item location in global script buffer
+	char *text;                                         // points to the item location in global script buffer
 } bot_script_event_t;
 //
 typedef struct
 {
-	char        *eventStr;
-	qboolean ( *eventMatch )( bot_script_event_t *event, char *eventParm );
+	char *eventStr;
+	qboolean (*eventMatch)(bot_script_event_t *event, char *eventParm);
 } bot_script_event_define_t;
 //
 // Scripting Status (NOTE: this MUST NOT contain any pointer vars)
@@ -306,14 +307,14 @@ typedef struct
 typedef struct
 {
 	int lineNum;
-	char    *name;
-	char    *params;
-	bot_script_data_t   *data;
+	char *name;
+	char *params;
+	bot_script_data_t *data;
 } bot_script_global_data_t;
 //
 typedef struct
 {
-	bot_script_data_t       *data;                          // pointer to global list of scripted characters
+	bot_script_data_t *data;                                // pointer to global list of scripted characters
 	//
 	bot_script_status_t status;                             // current status of scripting
 	int callIndex;                                          // inc'd each time a script is called
@@ -461,11 +462,13 @@ typedef struct
 	int expireTime;
 } botIgnoreGoal_t;
 
-typedef struct {
-	int ( *func )( struct bot_state_s *bs );
+typedef struct
+{
+	int (*func)(struct bot_state_s *bs);
 } botMatrixFunc_t;
 
-typedef struct {
+typedef struct
+{
 	botMatrixFunc_t cells[NUM_BWA][NUM_BMA];
 } botMatrix_t;
 
@@ -486,7 +489,7 @@ typedef struct bot_state_s
 	int entityeventTime[1024];                      //last entity event time
 	//
 	bot_settings_t settings;                        //several bot settings
-	int ( *ainode )( struct bot_state_s *bs );          //current AI node
+	int (*ainode)(struct bot_state_s *bs);              //current AI node
 	char *ainodeText;
 	float thinktime;                                //time the bot thinks this frame
 	vec3_t origin;                                  //origin of the bot
@@ -770,7 +773,7 @@ typedef struct bot_state_s
 	qboolean overrideMovementScripts;
 
 	// Each bot is allowed to have 1 indicator for where it is going
-	gentity_t*  indicator;
+	gentity_t *indicator;
 
 	// Gordon: 27//11/02: are we a pow?
 	qboolean isPOW;
@@ -800,9 +803,9 @@ typedef struct bot_state_s
 
 	//
 	// Goal/AI Matrix
-	botMatrix_t         *objectiveMatrix;
-	botMatrix_t         *behaviourMatrix;
-	botMatrix_t         *engagementMatrix;
+	botMatrix_t *objectiveMatrix;
+	botMatrix_t *behaviourMatrix;
+	botMatrix_t *engagementMatrix;
 	//
 	int lastAttackShared;
 	//
@@ -815,24 +818,24 @@ typedef struct bot_state_s
 	int clientCheckTime;                    // Gordon: pows check for enemies/friends nearby
 } bot_state_t;
 
-#define BFOFS( x ) ( (int)&( ( (bot_state_t *)0 )->x ) )
+#define BFOFS(x) ((int)&(((bot_state_t *)0)->x))
 
 // Used in ai_team.c for BotClosestSeekCoverSpot_r
-typedef qboolean ( *fCoverSpotCheck )( bot_state_t *bs, int leader, vec3_t leaderPos, g_serverEntity_t *coverSpot, float *bestDist );
+typedef qboolean (*fCoverSpotCheck)(bot_state_t *bs, int leader, vec3_t leaderPos, g_serverEntity_t *coverSpot, float *bestDist);
 
 //resets the whole bot state
-void BotResetState( bot_state_t *bs );
+void BotResetState(bot_state_t *bs);
 //returns the number of bots in the game
-int NumBots( void );
+int NumBots(void);
 //returns info about the entity
-void BotEntityInfo( int entnum, aas_entityinfo_t *info );
+void BotEntityInfo(int entnum, aas_entityinfo_t *info);
 
-int BotAI_GetNumBots( void );
-void BotAI_SetNumBots( int numbots );
+int BotAI_GetNumBots(void);
+void BotAI_SetNumBots(int numbots);
 
-gentity_t *BotFindEntityForName( char *name );
+gentity_t *BotFindEntityForName(char *name);
 
-int BotTravelFlagsForClient( int client );
+int BotTravelFlagsForClient(int client);
 
 // BotScript declarations
 // We need to support more than 64 bot scripts.  Note that this doesn't mean more than
@@ -842,14 +845,14 @@ int BotTravelFlagsForClient( int client );
 
 extern bot_script_global_data_t botCharacterScriptData[MAX_BOT_SCRIPT_CHARACTERS];
 
-void Bot_ScriptLoad( void );
-void Bot_ScriptParse( bot_script_data_t *bsd, char **text );
-qboolean Bot_ScriptInitBot( int entnum );
-qboolean Bot_ScriptRun( bot_state_t *bs, qboolean force );
-void Bot_ScriptLog_Entry( bot_state_t *bs, qboolean showDetails, char *preText, char *fmt, ... );
-int Bot_Script_GetCurrentLine( bot_state_t *bs );
-void Bot_ScriptThink( void );
-int Bot_FindSriptGlobalData( bot_script_data_t *data );
+void Bot_ScriptLoad(void);
+void Bot_ScriptParse(bot_script_data_t *bsd, char **text);
+qboolean Bot_ScriptInitBot(int entnum);
+qboolean Bot_ScriptRun(bot_state_t *bs, qboolean force);
+void Bot_ScriptLog_Entry(bot_state_t *bs, qboolean showDetails, char *preText, char *fmt, ...);
+int Bot_Script_GetCurrentLine(bot_state_t *bs);
+void Bot_ScriptThink(void);
+int Bot_FindSriptGlobalData(bot_script_data_t *data);
 // done.
 /*
 // Ridah, defines for AI Cast system
@@ -862,16 +865,17 @@ void AICast_StartFrame ( int time);
 extern bot_state_t botstates[MAX_CLIENTS];
 
 // from the game source
-void QDECL BotAI_Print( int type, char *fmt, ... );
-void QDECL QDECL BotAI_BotInitialChat( bot_state_t *bs, char *type, ... );
-void    BotAI_Trace( bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int passent, int contentmask );
-int     BotAI_GetClientState( int clientNum, playerState_t *state );
-int     BotAI_GetEntityState( int entityNum, entityState_t *state );
-int     BotAI_GetSnapshotEntity( int clientNum, int sequence, entityState_t *state );
+void QDECL BotAI_Print(int type, char *fmt, ...);
+void QDECL QDECL BotAI_BotInitialChat(bot_state_t *bs, char *type, ...);
+void    BotAI_Trace(bsp_trace_t *bsptrace, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int passent, int contentmask);
+int     BotAI_GetClientState(int clientNum, playerState_t *state);
+int     BotAI_GetEntityState(int entityNum, entityState_t *state);
+int     BotAI_GetSnapshotEntity(int clientNum, int sequence, entityState_t *state);
 
 // the static entity cache, to reduce load on G_Find()
 //	!!! NOTE: must be in synch with string list in ai_main.c
-typedef enum {
+typedef enum
+{
 	BOTSTATICENTITY_CHECKPOINT,
 	BOTSTATICENTITY_FLAGONLY,
 	BOTSTATICENTITY_MG42,
@@ -892,11 +896,11 @@ typedef enum {
 	NUM_BOTSTATICENTITY
 } botStaticEntityEnum_t;
 
-void BotBuildStaticEntityCache( void );
-gentity_t *BotFindNextStaticEntity( gentity_t *start, botStaticEntityEnum_t entityEnum );
-gentity_t *BotSpawnGameEntity( void );
+void BotBuildStaticEntityCache(void);
+gentity_t *BotFindNextStaticEntity(gentity_t *start, botStaticEntityEnum_t entityEnum);
+gentity_t *BotSpawnGameEntity(void);
 //void BotInitBotGameEntities(void);
-gentity_t *BotGetEntity( int entityNum );
+gentity_t *BotGetEntity(int entityNum);
 
 /*
 =================
@@ -906,22 +910,23 @@ FindBotByName
 Get the bot state of a named bot
 
 */
-bot_state_t *FindBotByName( char * botName );
+bot_state_t *FindBotByName(char *botName);
 
-int BotGetTargetExplosives( team_t team, int *list, int listSize, qboolean ignoreDynamite );
-int BotGetTargetsForSatchelCharge( team_t team, int *list, int listSize, qboolean ignoreDynamite );
-int BotGetTargetDynamite( int *list, int listSize, gentity_t* target );
-void BotDebugViewClient( int client );
+int BotGetTargetExplosives(team_t team, int *list, int listSize, qboolean ignoreDynamite);
+int BotGetTargetsForSatchelCharge(team_t team, int *list, int listSize, qboolean ignoreDynamite);
+int BotGetTargetDynamite(int *list, int listSize, gentity_t *target);
+void BotDebugViewClient(int client);
 
 // profiling vars
-extern int botTime_EmergencyGoals;
-extern int botTime_FindGoals;
-extern int botTime_FindEnemy;
+extern int      botTime_EmergencyGoals;
+extern int      botTime_FindGoals;
+extern int      botTime_FindEnemy;
 extern vmCvar_t bot_profile;
 
 extern vmCvar_t bot_findgoal;
 
-typedef enum botgoalFindType_e {
+typedef enum botgoalFindType_e
+{
 	/* *cough* */
 	BFG_FOLLOW_LEADER = 0,
 	BFG_CONSTRUCT,

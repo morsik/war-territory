@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,10 +38,10 @@ If you have questions concerning this license or the applicable additional terms
 //debugging on
 #define AAS_DEBUG
 
-#define DF_AASENTNUMBER( x )      ( x - ( *aasworlds ).entities )
-#define DF_NUMBERAASENT( x )      ( &( *aasworlds ).entities[x] )
-#define DF_AASENTCLIENT( x )      ( x - ( *aasworlds ).entities - 1 )
-#define DF_CLIENTAASENT( x )      ( &( *aasworlds ).entities[x + 1] )
+#define DF_AASENTNUMBER(x)      (x - (*aasworlds).entities)
+#define DF_NUMBERAASENT(x)      (&(*aasworlds).entities[x])
+#define DF_AASENTCLIENT(x)      (x - (*aasworlds).entities - 1)
+#define DF_CLIENTAASENT(x)      (&(*aasworlds).entities[x + 1])
 
 #ifndef MAX_PATH
 	#define MAX_PATH                MAX_QPATH
@@ -248,7 +248,7 @@ typedef struct aas_s
 	//maximum travel time through portals
 	int *portalmaxtraveltimes;
 	// Ridah, pointer to Route-Table information
-	aas_rt_t    *routetable;
+	aas_rt_t *routetable;
 	//hide travel times
 	unsigned short int *hidetraveltimes;
 
@@ -275,9 +275,9 @@ typedef struct aas_s
 	// RF, last time a death influenced this area. Seperate lists for axis/allies
 	int *teamDeathTime;
 	// RF, number of deaths accumulated before the time expired
-	byte    *teamDeathCount;
+	byte *teamDeathCount;
 	// RF, areas that are influenced by a death count
-	byte    *teamDeathAvoid;
+	byte *teamDeathAvoid;
 } aas_t;
 
 #define AASINTERN
