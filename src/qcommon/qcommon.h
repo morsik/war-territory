@@ -291,9 +291,9 @@ You or the server may be running older versions of the game. Press the auto-upda
 
 // NERVE - SMF - wolf multiplayer master servers
 #ifndef MASTER_SERVER_NAME
-	#define MASTER_SERVER_NAME      "etmaster.idsoftware.com"
+	#define MASTER_SERVER_NAME      "master0.etmaster.net"
 #endif
-#define MOTD_SERVER_NAME        "etmaster.idsoftware.com"    //"etmotd.idsoftware.com"			// ?.?.?.?
+#define MOTD_SERVER_NAME        "master0.etmaster.net"    //"etmotd.idsoftware.com"			// ?.?.?.?
 
 #ifdef AUTHORIZE_SUPPORT
 	#define AUTHORIZE_SERVER_NAME   "wolfauthorize.idsoftware.com"
