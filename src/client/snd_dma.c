@@ -56,6 +56,8 @@ streamingSound_t streamingSounds[MAX_STREAMING_SOUNDS];
 #define     SOUND_ATTENUATE     0.0008f
 #define     SOUND_RANGE_DEFAULT 1250
 
+//#define DEBUG_SOUND
+
 channel_t s_channels[MAX_CHANNELS];
 channel_t loop_channels[MAX_CHANNELS];
 int       numLoopChannels;
@@ -923,7 +925,10 @@ void S_Base_AddLoopingSound(const vec3_t origin, const vec3_t velocity, int rang
 
 	if (!sfx->soundLength)
 	{
-		Com_Error(ERR_DROP, "%s has length 0", sfx->soundName);
+#ifdef DEBUG_SOUND
+		Com_Printf("%s has length 0", sfx->soundName);
+#endif
+		return;
 	}
 
 	VectorCopy(origin, loopSounds[numLoopSounds].origin);
@@ -1016,7 +1021,10 @@ void S_Base_AddRealLoopingSound(const vec3_t origin, const vec3_t velocity, int 
 
 	if (!sfx->soundLength)
 	{
-		Com_Error(ERR_DROP, "%s has length 0", sfx->soundName);
+#ifdef DEBUG_SOUND
+		Com_Printf("%s has length 0", sfx->soundName);
+#endif
+		return;
 	}
 
 	VectorCopy(origin, loopSounds[numLoopSounds].origin);
